@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// ----- GET/ -> tutti gli utenti
+// ----- GET/ -> ottieni tutti gli utenti
 router.get("/", async (req, res) => {
   try {
     const user = await User.find();
@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ----- GET/ -> utente specifico
+// ----- GET/ -> ottieni utente specificato
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -51,7 +51,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// ----- DELETE/ -> utente specifico
+// ----- DELETE/ -> elimina utente specificato
 router.delete("/:id", async (req, res) => {
   try {
     const deleteUser = await User.findByIdAndDelete(req.params.id);
@@ -64,5 +64,20 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+// ----- PUT/ -> modifica utente specificato
+router.put("/:id", async (req, res) => {
+  try {
+    const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updateUser) {
+      return res.status(404).json({ message: "Utente non trovato" });
+    }
+    res.json(updateUser);
+
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 
 export default router;

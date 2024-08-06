@@ -4,7 +4,7 @@
   "hiredDate": "2024-01-01",
   "endDate": null,
   "isActive": true,
-  "storeCode": "12345",
+  "storeCode": "pdv01",
   "position": 1,
   "contacts": [
     {

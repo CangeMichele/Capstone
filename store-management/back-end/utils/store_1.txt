@@ -1,6 +1,6 @@
 {
-  "storeCode": "12345",
-  "Name": "Negozio Centrale",
+  "storeCode": "pdv01",
+  "Name": "Perugia 1",
   "status": "Attivo",
   "openingHours": [
     {
@@ -42,9 +42,9 @@
   "andress": [
     {
       "street": "Via Roma, 1",
-      "city": "Milano",
-      "state": "MI",
-      "postalCode": "20100",
+      "city": "Perugia",
+      "state": "PG",
+      "postalCode": "06121",
       "country": "Italia"
     }
   ],
@@ -57,11 +57,11 @@
   ],
   "manager": [
     {
-      "firstName": "Mario",
-      "lastName": "Rossi",
-      "phone": "3456789012",
-      "email": "mario.rossi@negoziocentrale.com",
-      "userId": "mrossi"
+      "firstName": "Luca",
+      "lastName": "Bianchi",
+      "phone": 1234567890,
+      "email": "luca.bianchi@example.com",
+      "userId": "66b2327c5bf6efff56a93dc4"
     }
   ],
   "password": "password123"

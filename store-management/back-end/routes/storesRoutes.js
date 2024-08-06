@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
     
     const newStore = await store.save();
     
-    const StoreResponse = newPdV.toObject();
+    const StoreResponse = newStore.toObject();
     delete StoreResponse.password;  // Rimuovo la password dalla risposta per sicurezza
     
     res.status(201).json(StoreResponse);
