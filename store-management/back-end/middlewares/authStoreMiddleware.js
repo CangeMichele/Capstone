@@ -2,7 +2,7 @@ import { verifyJWT } from "../utils/jwt.js";
 import Store from "../models/Store.js";
 
 // Middleware autenticazione punto vendita
-export const authPdVMiddleware = async (req, res, next) => {
+export const authStoreMiddleware = async (req, res, next) => {
   try {
 
     const token = req.headers.authorization?.replace("Bearer ", "");

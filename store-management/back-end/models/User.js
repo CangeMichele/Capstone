@@ -23,7 +23,9 @@ const AddressSchema = new  mongoose.Schema({
     type: String,
     required: true
   }
-});
+},
+{ _id: false } // evito di creare un _id per qesto sotto documento
+);
 
 // ----- Schema contatti 
 const ContactsSchema = new  mongoose.Schema(
@@ -42,7 +44,9 @@ const ContactsSchema = new  mongoose.Schema(
       trim: true
     },
     andress: [AddressSchema],
-  });
+  },
+  { _id: false } // evito di creare un _id per qesto sotto documento
+  );
 
 // ----- Schema dipendenti punto vendita
 const userSchema = new mongoose.Schema(
@@ -91,7 +95,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// ----- Contronto password
+// ----- Confronto password
 userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

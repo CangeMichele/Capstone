@@ -51,4 +51,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// ----- DELETE/ -> utente specifico
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleteUser = await User.findByIdAndDelete(req.params.id);
+    if (!deleteUser) {
+      return res.status(404).json({ message: "Utente non trovato" });
+    }
+    res.json({ message: "Utente eliminato" });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default router;

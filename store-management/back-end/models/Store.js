@@ -11,7 +11,9 @@ const OpeningHoursSchema = new mongoose.Schema(
     },
     open: { type: String, required: true },
     close: { type: String, required: true }
-  });
+  },
+  { _id: false } // evito di creare un _id per qesto sotto documento
+);
 
 // ----- Schema indirizzo
 const AddressSchema = new mongoose.Schema({
@@ -35,7 +37,9 @@ const AddressSchema = new mongoose.Schema({
     type: String,
     required: true
   }
-});
+},
+  { _id: false } // evito di creare un _id per qesto sotto documento
+);
 
 // ----- Schema contatti 
 const ContactsSchema = new mongoose.Schema(
@@ -53,7 +57,9 @@ const ContactsSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
-  });
+  },
+  { _id: false } // evito di creare un _id per qesto sotto documento
+);
 
 // ----- Schema responsabile punto vendita
 const ManagerSchema = new mongoose.Schema({
@@ -82,7 +88,9 @@ const ManagerSchema = new mongoose.Schema({
     required: true,
     trim: true
   }
-});
+},
+  { _id: false } // evito di creare un _id per qesto sotto documento
+);
 
 // ----- schema dei punti vendita 
 const StoreSchema = new mongoose.Schema(
@@ -108,9 +116,10 @@ const StoreSchema = new mongoose.Schema(
     contacts: [ContactsSchema],
     manager: [ManagerSchema],
 
-    password: { 
-      type: String, 
-      required: true },
+    password: {
+      type: String,
+      required: true
+    },
   },
   {
     timestamps: true,
@@ -118,7 +127,7 @@ const StoreSchema = new mongoose.Schema(
   }
 );
 
-// ----- Contronto password
+// ----- Confronto password
 StoreSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
