@@ -1,0 +1,68 @@
+{
+  "storeCode": "12345",
+  "Name": "Negozio Centrale",
+  "status": "Attivo",
+  "openingHours": [
+    {
+      "day": "Lunedì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Martedì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Mercoledì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Giovedì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Venerdì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Sabato",
+      "open": "10:00",
+      "close": "14:00"
+    },
+    {
+      "day": "Domenica",
+      "open": "Chiuso",
+      "close": "Chiuso"
+    }
+  ],
+  "andress": [
+    {
+      "street": "Via Roma, 1",
+      "city": "Milano",
+      "state": "MI",
+      "postalCode": "20100",
+      "country": "Italia"
+    }
+  ],
+  "contacts": [
+    {
+      "phone1": 1234567890,
+      "phone2": 987654321,
+      "email": "contatti@negoziocentrale.com"
+    }
+  ],
+  "manager": [
+    {
+      "firstName": "Mario",
+      "lastName": "Rossi",
+      "phone": "3456789012",
+      "email": "mario.rossi@negoziocentrale.com",
+      "userId": "mrossi"
+    }
+  ],
+  "password": "password123"
+}

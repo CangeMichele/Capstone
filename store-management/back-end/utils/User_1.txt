@@ -1,0 +1,26 @@
+{
+  "firstName": "Luca",
+  "lastName": "Bianchi",
+  "hiredDate": "2024-01-01",
+  "endDate": null,
+  "isActive": true,
+  "storeCode": "12345",
+  "position": 1,
+  "contacts": [
+    {
+      "phone1": 1234567890,
+      "phone2": 987654321,
+      "email": "luca.bianchi@example.com",
+      "andress": [
+        {
+          "street": "Via Garibaldi, 10",
+          "city": "Roma",
+          "state": "RM",
+          "postalCode": "00100",
+          "country": "Italia"
+        }
+      ]
+    }
+  ],
+  "password": "lucabianchi"
+}
