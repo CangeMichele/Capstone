@@ -11,7 +11,7 @@
       "phone1": 1234567890,
       "phone2": 987654321,
       "email": "luca.bianchi@example.com",
-      "andress": [
+      "address": [
         {
           "street": "Via Garibaldi, 10",
           "city": "Roma",

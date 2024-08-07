@@ -1,0 +1,26 @@
+{
+  "firstName": "Giovanni",
+  "lastName": "Ferrari",
+  "hiredDate": "2024-03-10",
+  "endDate": null,
+  "isActive": true,
+  "storeCode": "pdv01",
+  "position": 3,
+  "contacts": [
+    {
+      "phone1": 4567890123,
+      "phone2": 3210987654,
+      "email": "giovanni.ferrari@example.com",
+      "address": [
+        {
+          "street": "Corso Buenos Aires, 15",
+          "city": "Torino",
+          "state": "TO",
+          "postalCode": "10100",
+          "country": "Italia"
+        }
+      ]
+    }
+  ],
+  "password": "giovanni1234"
+}

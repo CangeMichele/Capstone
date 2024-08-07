@@ -1,0 +1,26 @@
+{
+  "firstName": "Maria",
+  "lastName": "Rossi",
+  "hiredDate": "2024-02-15",
+  "endDate": null,
+  "isActive": true,
+  "storeCode": "pdv01",
+  "position": 2,
+  "contacts": [
+    {
+      "phone1": 3456789012,
+      "phone2": 2109876543,
+      "email": "maria.rossi@example.com",
+      "address": [
+        {
+          "street": "Piazza Venezia, 5",
+          "city": "Milano",
+          "state": "MI",
+          "postalCode": "20100",
+          "country": "Italia"
+        }
+      ]
+    }
+  ],
+  "password": "mariarossi2024"
+}

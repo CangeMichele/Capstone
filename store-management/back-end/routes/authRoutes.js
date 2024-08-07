@@ -12,9 +12,9 @@ const router = express.Router();
 // ---- Autenticazione utente (recupero token di accesso)
 router.post("/user", async (req, res) => {
   try {
-    const { _id, password } = req.body;
+    const { userId, password } = req.body;
 
-    const user = await User.findById(_id);
+    const user = await User.findOne({userId});
     if (!user) {
       return res.status(401).json({ message: "Utente non trovato" });
     }
@@ -24,7 +24,7 @@ router.post("/user", async (req, res) => {
       return res.status(401).json({ message: "Password errata" });
     }
 
-    const token = await generateJWT({ id: author._id });
+    const token = await generateJWT({ id: userId });
     res.json({ token, message: "Login effettuato con successo" });
 
   } catch (error) {
@@ -36,7 +36,7 @@ router.post("/user", async (req, res) => {
 // ----- Recuper dati del utente
 router.get("/user", authUserMiddleware, (req, res) => {
 
-  const authorData = req.author.toObject();
+  const authorData = req.user.toObject();
   delete authorData.password;  // Rimuove il campo password per sicurezza
 
   res.json(authorData);

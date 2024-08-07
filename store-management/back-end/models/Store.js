@@ -112,7 +112,7 @@ const StoreSchema = new mongoose.Schema(
     },
 
     openingHours: [OpeningHoursSchema],
-    andress: [AddressSchema],
+    address: [AddressSchema],
     contacts: [ContactsSchema],
     manager: [ManagerSchema],
 

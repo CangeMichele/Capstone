@@ -1,0 +1,68 @@
+{
+  "storeCode": "pdv01",
+  "Name": "Perugia 1",
+  "status": "Inattivo",
+  "openingHours": [
+    {
+      "day": "Lunedì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Martedì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Mercoledì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Giovedì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Venerdì",
+      "open": "09:00",
+      "close": "18:00"
+    },
+    {
+      "day": "Sabato",
+      "open": "10:00",
+      "close": "14:00"
+    },
+    {
+      "day": "Domenica",
+      "open": "Chiuso",
+      "close": "Chiuso"
+    }
+  ],
+  "andress": [
+    {
+      "street": "Via Roma, 1",
+      "city": "Perugia",
+      "state": "PG",
+      "postalCode": "06121",
+      "country": "Italia"
+    }
+  ],
+  "contacts": [
+    {
+      "phone1": 1234567890,
+      "phone2": 987654321,
+      "email": "contatti@negoziocentrale.com"
+    }
+  ],
+  "manager": [
+    {
+      "firstName": "Luca",
+      "lastName": "Bianchi",
+      "phone": 1234567890,
+      "email": "luca.bianchi@example.com",
+      "userId": "66b2327c5bf6efff56a93dc4"
+    }
+  ],
+  "password": "password123"
+}
