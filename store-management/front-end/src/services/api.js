@@ -6,6 +6,7 @@ const api = axios.create({
     baseURL: API_URL,
 });
 
+// ----- aggiunge il token a tutte le richeste api
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem("token");
