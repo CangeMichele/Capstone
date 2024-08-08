@@ -1,13 +1,22 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
 
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { LinkContainer } from 'react-router-bootstrap';
+import "bootstrap/dist/css/bootstrap.min.css";
 
+import { Container, Nav, Navbar } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+
+import  {isLogUser}  from "../../function/isLogUser.js";
 
 function MyNavbar() {
+  
+  const isLoggedIn = isLogUser();
+  // ----- gestore Logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
   return (
     <Navbar expand="lg" bg="light" variant="light">
       <Container>
@@ -15,18 +24,22 @@ function MyNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <LinkContainer to="/">
-              <Nav.Link>Home</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/test-page">
-              <Nav.Link>Pagina test</Nav.Link>
-            </LinkContainer>
+            {/* mostra funzionalità se loggato */}
+            {isLoggedIn && (
+              <>
+                <LinkContainer to="/">
+                  <Nav.Link>Home</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/userlogin">
+                  <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                </LinkContainer>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 }
-
 
 export default MyNavbar;

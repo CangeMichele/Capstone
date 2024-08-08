@@ -25,8 +25,10 @@ export default function UserLogin() {
 
       // Trigger l'evento storage per aggiornare la Navbar
       window.dispatchEvent(new Event("storage")); // Scatena un evento di storage per aggiornare componenti come la Navbar
+      
       alert("Login effettuato con successo!"); // Mostra un messaggio di successo
-      navigate("/test-page"); // Naviga alla Home
+      navigate("/"); // Naviga alla Home
+
     } catch (error) {
       console.error("Errore durante il login:", error); 
       alert("Credenziali non valide. Riprova."); 
