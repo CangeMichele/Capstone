@@ -24,7 +24,7 @@ router.post("/user", async (req, res) => {
       return res.status(401).json({ message: "Password errata" });
     }
 
-    const token = await generateJWT({ id: userId });
+    const token = await generateJWT({ userId: userId });
     res.json({ token, message: "Login effettuato con successo" });
 
   } catch (error) {

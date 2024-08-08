@@ -15,7 +15,7 @@ export const authUserMiddleware = async (req, res, next) => {
     const decoded = await verifyJWT(token);
 
     //estrapolo i dati  User escludendo la password
-    const user = await User.findOne(decoded.userId).select("-password");
+    const user = await User.findOne({ userId: decoded.userId }).select("-password");
 
     if (!user) {
       return res.status(401).send("Utente non trovato");
