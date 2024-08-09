@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
+import { Row, Col, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { isLogUser } from "../../function/isLogUser";
@@ -28,8 +29,26 @@ const Home = () => {
 
   return (
     <>
-      <h1>QUESTA E' LA HOME </h1>
-      <h3>Benvenuto {user.firstName}</h3>
+      <Row className="d-flex align-items-center">
+        <Col xs="auto">
+          <h1>Benvenuto</h1>
+        </Col>
+        <Col xs="auto">
+          <h3> {user.firstName}</h3>
+        </Col>
+      </Row>
+
+      <Form className=" p-4 text-center w-50">
+        <Button variant="primary" size="lg" onClick={() => navigate('/casher') }>
+          Cassa
+        </Button>
+        <Button variant="primary" size="lg" onClick={() => navigate('/products') }>
+          Articoli
+        </Button>
+        <Button variant="primary" size="lg" onClick={() => navigate('/costumers') }>
+          Clienti
+        </Button>
+      </Form>
     </>
   );
 };
