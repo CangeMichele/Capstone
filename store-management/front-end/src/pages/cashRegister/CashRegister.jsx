@@ -1,11 +1,15 @@
 import React from "react";
 
-const CashRegister = () => {
+// ----- functions
+import { isLogUser } from "../../functions/isLogUser";
 
-return(
+const CashRegister = () => {
+  isLogUser();
+
+  return (
     <>
-    <h1>Cassa</h1>
+      <h1>Cassa</h1>
     </>
-)
+  );
 };
- export default CashRegister;
+export default CashRegister;

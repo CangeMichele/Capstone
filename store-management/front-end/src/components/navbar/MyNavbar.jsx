@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
-import  {isLogUser}  from "../../function/isLogUser.js";
+import  {isLogUser}  from "../../functions/isLogUser.js";
 
 function MyNavbar() {
   

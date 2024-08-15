@@ -21,6 +21,10 @@ export default function UserLogin() {
 
     try {
       const response = await loginUser(formData); //richiama api per il loging utente
+      console.log("respone");
+      console.log(response);
+      
+            
       localStorage.setItem("token", response.token); 
 
       // Trigger l'evento storage per aggiornare la Navbar

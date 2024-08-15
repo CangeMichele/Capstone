@@ -1,0 +1,12 @@
+{
+    "name": "Purina One Adult Dog Chicken and Whole Grains",
+    "brand": "Purina",
+    "product_id": "", 
+    "category": "Cani",
+    "ean": "7613035807593",
+    "price": 24.99,
+    "quantity": "2.5kg",
+    "description": "Cibo secco per cani adulti, a base di pollo e cereali integrali, per un'alimentazione bilanciata e nutriente.",
+    "stockQuantity": 60,
+    "imageUrl": "https://example.com/images/purina-one-adult-dog-chicken-whole-grains.jpg"
+}

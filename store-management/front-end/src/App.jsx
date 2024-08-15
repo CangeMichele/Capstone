@@ -18,6 +18,7 @@ import CashRegister from "./pages/cashRegister/CashRegister";
 // ----- react
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+
 function App() {
   
   return (
@@ -27,8 +28,8 @@ function App() {
 
         <Container className="container-app">
           <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/userlogin" element={<UserLogin />} />
+            <Route path="/" element={<Home />} />
             <Route path="/casher" element={<CashRegister />} />
             <Route path="/products" element={<Products />} />
             <Route path="/casher" element={<CashRegister />} />

@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-// ----- Funzione per genrerare numero casuale di 5 cifre 
-function generateRandom5() {
-  return Math.floor(10000 + Math.random() * 90000);
-}
-
 // ----- Schema indirizzo
 const AddressSchema = new mongoose.Schema({
   street: {
@@ -62,9 +57,7 @@ const userSchema = new mongoose.Schema({
   },
   userId: {
     type: Number,
-    unique: true,
-    required: true,
-    default: 999999
+    unique: true
   },
   hiredDate: {
     type: String,
@@ -99,23 +92,25 @@ const userSchema = new mongoose.Schema({
 });
 
 // ----- Confronto password fornita con password hashata
-userSchema.methods.comparePassword = function(candidatePassword) {
+userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-
 // ----- Middleware elaborazione prima del salvataggio 
-userSchema.pre("save", async function(next) {
-  
-  // Generazione userId univoco di 5 cifre
+userSchema.pre("save", async function (next) {
   if (this.isNew) {
     while (true) {
-      const newId = generateRandom5();
+
+      // Generazione newId di 5 cifre
+      const newId = Math.floor(10000 + Math.random() * 90000);
+
+      // verifico unicità newId e lo assegno a brand_id
       const existingUser = await this.constructor.findOne({ userId: newId });
-      if (!existingUser && newId !== 99999) {
+      if (!existingUser) {
         this.userId = newId;
         break;
       }
+
     }
   }
 

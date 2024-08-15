@@ -1,0 +1,30 @@
+{
+    "name": "Purina",
+    "address": "Viale Gherzi 1, 28100 Novara, Italia",
+    "website": "https://www.purina.it",
+    "logoUrl": "https://www.purina.it/logo.png",
+    "supplier": {
+        "name": "Nestlé Purina PetCare",
+        "contactPerson": "Luca Bianchi",
+        "phone": "+39 0321 123456",
+        "email": "luca.bianchi@purina.nestle.com",
+        "address": "Via del Mulino 3, 20090 Assago MI, Italia",
+        "website": "https://www.purina.it",
+        "orderMethods": [
+            {
+                "method": "online",
+                "details": "https://www.purina.it/ordine"
+            },
+            {
+                "method": "phone",
+                "details": "+39 0321 123456"
+            },
+            {
+                "method": "email",
+                "details": "orders@purina.nestle.com"
+            }
+        ],
+        "orderDays": ["Lunedì", "Mercoledì", "Venerdì"],
+        "deliveryDays": ["Martedì", "Giovedì", "Sabato"]
+    }
+}

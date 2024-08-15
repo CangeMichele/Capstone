@@ -1,0 +1,12 @@
+{
+    "name": "Purina Pro Plan Adult Cat with Chicken",
+    "brand": "Purina",
+    "product_id": "", 
+    "category": "Gatti",
+    "ean": "7613035482750",
+    "price": 18.99,
+    "quantity": "3kg",
+    "description": "Crocchette per gatti adulti, formulate con pollo come primo ingrediente per mantenere un corpo snello e muscoloso.",
+    "stockQuantity": 75,
+    "imageUrl": "https://example.com/images/purina-pro-plan-adult-cat-chicken.jpg"
+}

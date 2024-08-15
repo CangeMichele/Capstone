@@ -10,6 +10,7 @@ import storesRoutes from "./routes/storesRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
 import costumersRoutes from "./routes/costumersRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
+import brandRoutes from "./routes/brandRoutes.js";
 // ----- middleware
 import {
   badRequestHandler,
@@ -42,6 +43,7 @@ app.use("/api/stores", storesRoutes);
 app.use("/api/users", usersRoutes); 
 app.use("/api/costumers", costumersRoutes);
 app.use("/api/products", productsRoutes);
+app.use("/api/brand", brandRoutes);
 
 // Definizione porta Server
 const PORT = process.env.PORT || 3001;

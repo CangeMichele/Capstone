@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { isLogUser } from "../../function/isLogUser";
+import { isLogUser } from "../../functions/isLogUser";
 import { getUserData } from "../../services/api.js";
 const Home = () => {
   // ---- funzione che controlla se utente loggato, se no rimanda al login
