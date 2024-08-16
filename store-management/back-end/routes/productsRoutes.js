@@ -4,6 +4,8 @@ import Product from "../models/Product.js";
 
 const router = express.Router();
 
+
+
 // -----POST/ -> nuovo prodotto
 router.post("/", async (req, res) => {
   try {
@@ -29,6 +31,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
 // -----DELETE -> cancella articolo
 router.delete("/:id", async (req, res) => {
   try {
@@ -37,6 +40,17 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "Articolo non trovato" });
     }
     res.json({ message: "Articolo eliminato" });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// -----GET -> prodotti per Brand
+router.get("/:brand", async (req, res) => {
+  try {
+    const productsBrand = await Product.find({brand: req.params.brand});
+    res.json(productsBrand);
 
   } catch (err) {
     res.status(500).json({ message: err.message });

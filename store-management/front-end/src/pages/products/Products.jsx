@@ -1,5 +1,10 @@
+// ----- React -----
 import React, { useState } from "react";
+// ----- Stilizzazione -----
 import { Form } from "react-bootstrap";
+// ----- Componenti -----
+import BrandTabs from "../../components/products/BrandTabs.jsx";
+
 
 const Products = () => {
   const [search, setSearch] = useState("");
@@ -7,7 +12,8 @@ const Products = () => {
 
   return (
     <>
-      <Form.Group className="m-3">
+    {/* barra di ricerca */}
+      <Form.Group >
         <Form.Control
           type="search"
           placeholder="cerca..."
@@ -15,6 +21,11 @@ const Products = () => {
           onChange={handleSearch}
         />
       </Form.Group>
+
+      {/* bottoni/schede brand */}
+      <BrandTabs />
+
+      {/*elenco prodotti*/}
 
       <h1>{search}</h1>
     </>

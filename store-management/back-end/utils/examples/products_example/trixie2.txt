@@ -1,0 +1,14 @@
+{
+    "name": "Gabbia per Uccelli Natura",
+    "brand": "Trixie",
+    "product_id": "02003",
+    "category": "Uccelli",
+    "ean": "4011905024905",
+    "price": 59.99,
+    "quantity": "1 pezzo",
+    "description": "Gabbia spaziosa per uccelli, con accessori inclusi e base facile da pulire.",
+    "stockQuantity": 25,
+    "imageUrl": "https://www.trixie.de/images/gabbiauccelli.jpg",
+    "createdAt": "2024-08-15",
+    "updatedAt": "2024-08-15"
+}

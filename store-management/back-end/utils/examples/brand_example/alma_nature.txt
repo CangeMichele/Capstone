@@ -1,0 +1,34 @@
+{
+  "name": "Almo Nature",
+  "address": "Via Cristoforo Colombo, 35, 16121 Genova GE, Italia",
+  "website": "https://www.almonature.com",
+  "logoUrl": "https://www.almonature.com/logo.png",
+  "supplier": {
+    "name": "Almo Nature S.p.A.",
+    "contactPerson": "Giovanni Rossi",
+    "phone": "+39 010 123456",
+    "email": "giovanni.rossi@almonature.com",
+    "address": "Via Cristoforo Colombo, 35, 16121 Genova GE, Italia",
+    "website": "https://www.almonature.com",
+    "orderMethods": [
+      {
+        "method": "online",
+        "details": "https://shop.almonature.com"
+      },
+      {
+        "method": "email",
+        "details": "orders@almonature.com"
+      }
+    ],
+    "orderDays": [
+      "Lunedì",
+      "Mercoledì",
+      "Venerdì"
+    ],
+    "deliveryDays": [
+      "Martedì",
+      "Giovedì"
+    ]
+  },
+  
+}

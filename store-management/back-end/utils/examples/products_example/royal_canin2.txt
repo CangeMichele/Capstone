@@ -1,0 +1,12 @@
+{
+    "name": "Royal Canin Mini Puppy Food",
+    "brand": "Royal Canin",
+    "product_id": "00102",
+    "category": "Cani",
+    "ean": "3182550783249",
+    "price": 18.75,
+    "quantity": "1.5kg",
+    "description": "Cibo secco per cuccioli di taglia piccola. Favorisce una crescita sana e uno sviluppo equilibrato.",
+    "stockQuantity": 30,
+    "imageUrl": "https://www.royalcanin.com/images/mini-puppy-food.jpg"
+}

@@ -1,0 +1,26 @@
+{
+    "name": "Trixie",
+    "address": "Via delle Puglie 45, 30030 Vigonza PD, Italy",
+    "website": "https://www.trixie.de",
+    "logoUrl": "https://www.trixie.de/images/logo.png",
+    "supplier": {
+        "name": "Trixie Pet Products",
+        "contactPerson": "Anna Schmidt",
+        "phone": "+39 049 1234567",
+        "email": "info@trixie.de",
+        "address": "Via delle Puglie 45, 30030 Vigonza PD, Italy",
+        "website": "https://www.trixie.de",
+        "orderMethods": [
+            {
+                "method": "online",
+                "details": "Orders can be placed through the official website."
+            },
+            {
+                "method": "phone",
+                "details": "Call +39 049 1234567 to place an order."
+            }
+        ],
+        "orderDays": ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"],
+        "deliveryDays": ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"]
+    }
+}

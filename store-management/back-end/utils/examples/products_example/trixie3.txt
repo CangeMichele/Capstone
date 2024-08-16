@@ -1,0 +1,14 @@
+{
+    "name": "Cuccia per Gatti MyKitty",
+    "brand": "Trixie",
+    "product_id": "02002",
+    "category": "Gatti",
+    "ean": "4011905024868",
+    "price": 34.99,
+    "quantity": "1 pezzo",
+    "description": "Cuccia accogliente e morbida per gatti, disponibile in diverse dimensioni.",
+    "stockQuantity": 40,
+    "imageUrl": "https://www.trixie.de/images/cucciagatto.jpg",
+    "createdAt": "2024-08-15",
+    "updatedAt": "2024-08-15"
+}

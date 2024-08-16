@@ -1,0 +1,26 @@
+{
+    "name": "Royal Canin",
+    "address": "12 Avenue Louis Roche, 06200 Nice, Francia",
+    "website": "https://www.royalcanin.com",
+    "logoUrl": "https://www.royalcanin.com/logo.png",
+    "supplier": {
+        "name": "Royal Canin",
+        "contactPerson": "Claire Dubois",
+        "phone": "+33 4 93 00 00 00",
+        "email": "contact@royalcanin.com",
+        "address": "12 Avenue Louis Roche, 06200 Nice, Francia",
+        "website": "https://www.royalcanin.com",
+        "orderMethods": [
+            {
+                "method": "online",
+                "details": "Acquista attraverso il nostro sito ufficiale."
+            },
+            {
+                "method": "email",
+                "details": "Scrivi a orders@royalcanin.com per ordini speciali."
+            }
+        ],
+        "orderDays": ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"],
+        "deliveryDays": ["Lunedì", "Mercoledì", "Venerdì"]
+    }
+}

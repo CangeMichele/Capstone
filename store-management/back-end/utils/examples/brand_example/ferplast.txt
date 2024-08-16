@@ -1,0 +1,26 @@
+{
+    "name": "Ferplast",
+    "address": "Via Stoppani 12, 31030 Casale sul Sile TV, Italy",
+    "website": "https://www.ferplast.com",
+    "logoUrl": "https://www.ferplast.com/images/logo.png",
+    "supplier": {
+        "name": "Ferplast S.p.A.",
+        "contactPerson": "Marco Rossi",
+        "phone": "+39 0422 789456",
+        "email": "info@ferplast.com",
+        "address": "Via Stoppani 12, 31030 Casale sul Sile TV, Italy",
+        "website": "https://www.ferplast.com",
+        "orderMethods": [
+            {
+                "method": "online",
+                "details": "Orders can be placed through the official website."
+            },
+            {
+                "method": "phone",
+                "details": "Call +39 0422 789456 to place an order."
+            }
+        ],
+        "orderDays": ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"],
+        "deliveryDays": ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"]
+    }
+}

@@ -3,79 +3,116 @@ import axios from "axios";
 // ----- Configurazione endpoint axios
 const API_URL = "http://localhost:3000/api";
 const api = axios.create({
-    baseURL: API_URL,
+  baseURL: API_URL,
 });
 
 // ----- aggiunge il token a tutte le richeste api
 api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            config.headers["Authorization"] = `Bearer ${token}`;
-            console.log("Token inviato:", token);
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+      console.log("Token inviato:", token);
     }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
-// ----- FUNZIONI RICHIESTE API ----- //
+// *************** FUNZIONI RICHIESTE API *************** //
 
-// LOGIN USER
+// ----- USER -----
+//login
 export const loginUser = async (credentials) => {
-    try {
-      const response = await api.post("/auth/user", credentials);
-      console.log("Risposta API login:", response.data); // Log della risposta per debugging
-      return response.data; 
+  try {
+    const response = await api.post("/auth/user", credentials);
+    console.log("Risposta API login:", response.data); // Log della risposta per debugging
+    return response.data;
 
-    } catch (error) {
-      console.error("Errore nella chiamata API di login:", error); // Log dell'errore per debugging
-      console.log("credenzioali: "+{credentials});
-      
-      throw error; 
-    }
-  };
+  } catch (error) {
+    console.error("Errore nella chiamata API di login:", error); // Log dell'errore per debugging
+    console.log("credenzioali: " + { credentials });
 
-  // GET USER  DATA (dati utente loggato)  
-  export const getUserData = async () => {
-    try {
-      const response = await api.get("/auth/user"); 
-      return response.data;
+    throw error;
+  }
+};
+// (dati utente loggato)  
+export const getUserData = async () => {
+  try {
+    const response = await api.get("/auth/user");
+    return response.data;
 
-    } catch (error) {
-      console.error("Errore nel recupero dei dati utente:", error); // Log dell'errore per debugging
-      throw error;
-    }
-  };
+  } catch (error) {
+    console.error("Errore nel recupero dei dati utente:", error); // Log dell'errore per debugging
+    throw error;
+  }
+};
 
-  // LOGIN STORE    
+
+
+
+
+// ----- STORE -----
+// login    
 export const loginStore = async (credentials) => {
-    try {
-      const response = await api.post("/auth/store", credentials);
-      console.log("Risposta API login:", response.data); // Log della risposta per debugging
-      return response.data; 
+  try {
+    const response = await api.post("/auth/store", credentials);
+    console.log("Risposta API login:", response.data); // Log della risposta per debugging
+    return response.data;
 
-    } catch (error) {
-      console.error("Errore nella chiamata API di login:", error); // Log dell'errore per debugging
-      throw error; 
-    }
-  };
+  } catch (error) {
+    console.error("Errore nella chiamata API di login:", error); // Log dell'errore per debugging
+    throw error;
+  }
+};
+//(dati punto vendita loggato)  
+export const getStoreData = async () => {
+  try {
+    const response = await api.get("/auth/store");
+    return response.data;
 
-  // GET STORE  DATA (dati punto vendita loggato)  
-  export const getStoreData = async () => {
-    try {
-      const response = await api.get("/auth/store"); 
+  } catch (error) {
+    console.error("Errore nel recupero dei dati punto vendita:", error); // Log dell'errore per debugging
+    throw error;
+  }
+};
+
+
+
+
+
+// ----- BRAND -----
+//tutti i brand
+export const getBrands = async () => {
+  try{
+    const response = await api.get("/brand");
+    return response.data;
+  } catch (error){
+    console.error("Errore nella chiamata API getBrands", error);
+    throw error;
+  }
+};
+
+
+
+
+// ----- PRODUCTS -----
+//prodotti per brand
+export const getProductsBrand = async (brand) => {
+  try {
+    const response = await api.get(`/products/${brand}`);
       return response.data;
-
-    } catch (error) {
-      console.error("Errore nel recupero dei dati punto vendita:", error); // Log dell'errore per debugging
-      throw error;
-    }
-  };
-
-  
+    
+  } catch (error) {
+    console.error("Errore nella chiamata API getProductsBrand", error)
+  }
+}
 
 
-  export default api;
+
+
+
+
+export default api;

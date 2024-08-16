@@ -1,0 +1,14 @@
+{
+    "name": "Collare per Cani Ergocomfort",
+    "brand": "Ferplast",
+    "product_id": "01001",
+    "category": "Cani",
+    "ean": "8010690094748",
+    "price": 15.99,
+    "quantity": "1 pezzo",
+    "description": "Collare ergonomico regolabile per cani, con imbottitura per un maggiore comfort.",
+    "stockQuantity": 100,
+    "imageUrl": "https://www.ferplast.com/images/ergocomfort.jpg",
+    "createdAt": "2024-08-15",
+    "updatedAt": "2024-08-15"
+}

@@ -1,0 +1,12 @@
+{
+    "name": "Royal Canin Adult Cat Food",
+    "brand": "Royal Canin",
+    "product_id": "00101",
+    "category": "Gatti",
+    "ean": "3182550789234",
+    "price": 22.50,
+    "quantity": "2kg",
+    "description": "Cibo secco completo e bilanciato per gatti adulti. Aiuta a mantenere una pelle sana e un pelo lucido.",
+    "stockQuantity": 50,
+    "imageUrl": "https://www.royalcanin.com/images/adult-cat-food.jpg"
+}

@@ -72,7 +72,6 @@ productSchema.pre("save", async function (next) {
             let brandId;
             // Incrocio 'brand' con 'name' di BrandSchema e ricavo brandId
             const brand = await Brand.findOne({ name: this.brand });
-            console.log("Brand:", brand);
             if (brand) {
                 brandId = brand.brand_id; // Assegno il valore
                 
@@ -81,7 +80,6 @@ productSchema.pre("save", async function (next) {
                 return next(error);
             }
             
-            console.log("Brand ID trovato:", brandId);
             while (true) {
                 // Generazione random di 3 cifre
                 let ran3 = Math.floor(100 + Math.random() * 900);
@@ -93,7 +91,6 @@ productSchema.pre("save", async function (next) {
                 const existingProduct = await this.constructor.findOne({ product_id: productId });
                 if (!existingProduct) {
                     this.product_id = productId;
-                    console.log("productId:",  this.product_id);
                     break;
 
                 }

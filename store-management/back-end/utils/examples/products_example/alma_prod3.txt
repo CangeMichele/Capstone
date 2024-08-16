@@ -1,0 +1,11 @@
+{
+  "name": "Almo Nature Rouge Label Pesce - 85g",
+  "brand": "Almo Nature",
+  "category": "Gatti",
+  "ean": "8001154765432",
+  "price": 1.20,
+  "quantity": "85g",
+  "description": "Cibo umido per gatti, ricco di pesce fresco e naturale. Ottima fonte di proteine e Omega-3.",
+  "stockQuantity": 150,
+  "imageUrl": "https://www.almonature.com/images/rouge-label-pesce.jpg"
+}

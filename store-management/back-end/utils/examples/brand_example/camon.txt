@@ -1,0 +1,26 @@
+{
+    "name": "Camon",
+    "address": "Via dell'Industria 10, 22060 Montano Lucino CO, Italy",
+    "website": "https://www.camon.it",
+    "logoUrl": "https://www.camon.it/images/logo.png",
+    "supplier": {
+        "name": "Camon S.p.A.",
+        "contactPerson": "Giulia Moretti",
+        "phone": "+39 031 123456",
+        "email": "info@camon.it",
+        "address": "Via dell'Industria 10, 22060 Montano Lucino CO, Italy",
+        "website": "https://www.camon.it",
+        "orderMethods": [
+            {
+                "method": "online",
+                "details": "Orders can be placed through the official website."
+            },
+            {
+                "method": "phone",
+                "details": "Call +39 031 123456 to place an order."
+            }
+        ],
+        "orderDays": ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"],
+        "deliveryDays": ["Martedì", "Giovedì", "Sabato"]
+    }
+}
