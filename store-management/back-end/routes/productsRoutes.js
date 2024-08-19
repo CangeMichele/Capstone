@@ -6,20 +6,28 @@ const router = express.Router();
 
 
 
-// -----POST/ -> nuovo prodotto
+// -----POST/ -> inserimento nuovo prodotto / array prodotti
 router.post("/", async (req, res) => {
+
   try {
-    const product = new Product(req.body);
+    //se non è un array crea un array con il singolo elemento
+    const productsData = Array.isArray(req.body) ? req.body : [req.body];
 
-    const newProduct= await product.save();
+    const savedProducts = [];
+    //iters l'array aggioungendo un articolo alla volta per poter eseguire le operazioni di productsSchema
+    for (const productData of productsData) {
+      const product = new Product(productData);
+      const newProduct = await product.save();
+      savedProducts.push(newProduct);
+    }
 
-    const productResponse = newProduct.toObject();
-    res.status(201).json(productResponse);
-
+    res.status(201).json(savedProducts);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
+
+
 
 // -----GET -> tutti i prodotti
 router.get("/", async (req, res) => {
@@ -46,11 +54,28 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// -----GET -> prodotti per Brand
+
+// -----GET -> prodotti per Brand  con impaginazione
 router.get("/:brand", async (req, res) => {
   try {
-    const productsBrand = await Product.find({brand: req.params.brand});
-    res.json(productsBrand);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sort = req.query.sort || "product_id";
+    const sortDirection = req.query.sortDirection === 'desc' ? 1 : -1;
+    const skip = (page-1)*limit;
+
+    const productsBrand = await Product.find({ brand: req.params.brand })
+    .sort({[sort]: sortDirection})
+    .skip(skip)
+    .limit(limit);
+    
+    const total = await  Product.countDocuments({ brand: req.params.brand });
+
+    res.json({productsBrand,
+      currentPage: page,
+      totalPages: Math.ceil(total/limit),
+      totalProducts: total
+    });
 
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -59,6 +84,3 @@ router.get("/:brand", async (req, res) => {
 
 
 export default router;
-
-
-/////// DELETE BRAND E REINSERIRE

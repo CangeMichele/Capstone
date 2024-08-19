@@ -11,8 +11,9 @@ import MyNavbar from "./components/navbar/MyNavbar";
 import Home from "./pages/home/Home";
 import UserLogin from "./pages/userLogin/UserLogin";
 import ErrorPage from "./pages/errorPage/ErrorPage";
+import ProductsPage from "./pages/products/ProductsPage";
+import ProductDetails from "./pages/products/ProductDetails";
 import CustomersMgmt from "./pages/customersMgmt/CustomersMgmt";
-import Products from "./pages/products/Products";
 import CashRegister from "./pages/cashRegister/CashRegister";
 
 // ----- react
@@ -31,7 +32,8 @@ function App() {
             <Route path="/userlogin" element={<UserLogin />} />
             <Route path="/" element={<Home />} />
             <Route path="/casher" element={<CashRegister />} />
-            <Route path="/products" element={<Products />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/products/details/:product_id" element={<ProductDetails />} />
             <Route path="/casher" element={<CashRegister />} />
             <Route path="/costumers" element={<CustomersMgmt />} />
             <Route path="*" element={<ErrorPage />} />

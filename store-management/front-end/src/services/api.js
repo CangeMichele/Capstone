@@ -23,7 +23,7 @@ api.interceptors.request.use(
 
 // *************** FUNZIONI RICHIESTE API *************** //
 
-// ----- USER -----
+// ----- USER --------------------------------------------------------------------------------------------------------------
 //login
 export const loginUser = async (credentials) => {
   try {
@@ -54,7 +54,7 @@ export const getUserData = async () => {
 
 
 
-// ----- STORE -----
+// ----- STORE --------------------------------------------------------------------------------------------------------------
 // login    
 export const loginStore = async (credentials) => {
   try {
@@ -83,7 +83,7 @@ export const getStoreData = async () => {
 
 
 
-// ----- BRAND -----
+// ----- BRAND --------------------------------------------------------------------------------------------------------------
 //tutti i brand
 export const getBrands = async () => {
   try{
@@ -98,7 +98,7 @@ export const getBrands = async () => {
 
 
 
-// ----- PRODUCTS -----
+// ----- PRODUCTS -----------------------------------------------------------------------------------------------------------
 //prodotti per brand
 export const getProductsBrand = async (brand) => {
   try {
@@ -108,7 +108,43 @@ export const getProductsBrand = async (brand) => {
   } catch (error) {
     console.error("Errore nella chiamata API getProductsBrand", error)
   }
-}
+};
+
+//prodotti per brand con impaginazione
+export const getProductsPage = async (brand, currentPage, limit) =>{
+  try {
+    const response = await api.get(`/products/${brand}`, {
+      params: {
+          page: currentPage,
+          limit: limit
+      },
+  });
+  return response.data;
+
+  } catch (error) {
+    console.error("Errore nella chiamata API getProductsPage", error);
+    throw error;
+  }
+};
+
+//tutti i prodotti con impaginazione
+export const getAllProducts = async (currentPage, limit) => {
+  try {
+    const response = await api.get("/products", {
+      params : {
+        page: currentPage, 
+        limit: limit
+      },
+    });
+    return response.data;s
+    
+  } catch (error) {
+    console.error("Errore nella chiamata API getAllProduct", error);
+    throw error;
+  }
+};
+
+  
 
 
 

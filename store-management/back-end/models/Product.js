@@ -49,6 +49,11 @@ const productSchema = new mongoose.Schema({
         required: true,
         min: 0
     },
+    inStock: {
+        type: Boolean,
+        required: true,
+        default: true // Default è true, indicando che il prodotto è in assortimento
+    },
     imageUrl: {
         type: String, // URL dell'immagine del prodotto
         trim: true
