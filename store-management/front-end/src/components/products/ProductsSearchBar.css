@@ -1,0 +1,8 @@
+.src-error-class{
+    border: 2px solid red;
+}
+
+.invalid-message {
+    color: red;
+    font-weight: 500;
+  }

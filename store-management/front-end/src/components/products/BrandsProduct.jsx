@@ -2,10 +2,9 @@
 import React from "react";
 // ----- stilizzazione -----
 import { Button, ButtonGroup } from "react-bootstrap";
-// ----- componenti -----
-import ProductsTable from "./ProductsTable.jsx";
 
-function ProductsData({ brands, thisBrand, setThisBrand }) {
+
+function BrandsProduct({ brands, thisBrand, setThisBrand }) {
  
 
 
@@ -29,9 +28,9 @@ function ProductsData({ brands, thisBrand, setThisBrand }) {
 
       </ButtonGroup>
 
-      {thisBrand && <ProductsTable brand={thisBrand}/>}
+    
     </>
   );
 }
 
-export default ProductsData;
+export default BrandsProduct;
