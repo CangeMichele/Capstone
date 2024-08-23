@@ -9,7 +9,7 @@ import BrandsProduct from "../../components/products/BrandsProduct.jsx";
 import ProductsSearchBar from "../../components/products/ProductsSearchBar.jsx";
 import ProductsTable from "../../components/products/ProductsTable.jsx";
 // ----- funzioni -----
-import srcProductsFunction from "../../functions/srcProducts.js";
+// import srcProductsFunction from "../../functions/srcProducts.js";
 
 const Products = () => {
   // useState esterni per poterli utlizzare in tutti i componenti di ProductPage
@@ -39,9 +39,9 @@ const Products = () => {
     fetchBrands();
   }, []);
 
-  useEffect(() => {
-    srcProductsFunction(srcParams, thisBrand);
-  }, [srcParams]);
+  // useEffect(() => {
+  //   srcProductsFunction(srcParams, thisBrand);
+  // }, [srcParams]);
 
   return (
     <Container>
