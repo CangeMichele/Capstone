@@ -4,7 +4,7 @@ import React from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 
 
-function BrandsProduct({ brands, thisBrand, setThisBrand }) {
+function NavBrands({ brands, thisBrand, setThisBrand }) {
  
 
 
@@ -33,4 +33,4 @@ function BrandsProduct({ brands, thisBrand, setThisBrand }) {
   );
 }
 
-export default BrandsProduct;
+export default NavBrands;

@@ -111,14 +111,22 @@ export const getProductsBrand = async (brand) => {
 };
 
 //prodotti per brand con impaginazione
-export const getProductsPage = async (brand, currentPage, limit) =>{
+export const getProductsPage = async (brand, page, limit, srcText, inName, inDescription) =>{
   try {
-    const response = await api.get(`/products/${brand}`, {
-      params: {
-          page: currentPage,
-          limit: limit
-      },
-  });
+    
+    //oggetto parametri interrogazione DB
+    const params = {
+      page: page,
+      limit: limit
+  };
+
+  if(srcText) {
+    params.srcText = srcText;
+    if (inName) params.in_name = inName;
+    if (inDescription) params.in_description = inDescription;
+  }
+    
+  const response = await api.get(`/products/${brand}`, { params } );
   return response.data;
 
   } catch (error) {

@@ -1,49 +1,20 @@
 // ----- React -----
-import React, { useEffect, useState } from "react";
+import React from "react";
 //----- React-router-dom
 import { useNavigate } from "react-router-dom";
-// ----- API -----
-import { getProductsPage, getAllProducts } from "../../services/api";
 // ----- stilizzazione -----
 import { Table, Row, Col, Button, Form } from "react-bootstrap";
 
-function ProductsTable({ brand}) {
-  //per impaginazione
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(10);
+function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
+  // Destrutturo paginazione per gestire singolarmente gli stati
+  const { currentPage, totalPages, limit } = pagination;
 
-  const [products, setProducts] = useState([]);
+  // Gestore navigazione
+  const navigate = useNavigate();  
 
-  const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    //richiama prodotti per brand con impaginazione
-    const fetchProductsBrand = async () => {
-      setLoading(true);
-      try {
-        const response = await getProductsPage(brand.name, currentPage, limit);
-
-        setProducts(response.productsBrand);
-        setTotalPages(response.totalPages);
-      } catch (error) {
-        console.error("Errore nella richieta prodotti per brand:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProductsBrand();
-
-  
-  }, [brand, currentPage, limit]);
   return (
     <>
-      {loading && <div>Loading...</div>}
-
-      {/* --- visualizzo i podotti in formato tabella --- */}
+      {/* --- visualizzo i prodotti in formato tabella --- */}
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -59,13 +30,15 @@ function ProductsTable({ brand}) {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => (
-            <tr key={product.product_id}  
-            onClick={() =>
-              navigate(`details/${product.product_id}`, {
-                state: { product, brand  }
-              })
-            }>
+          {srcResult && srcResult.map((product) => (
+            <tr
+              key={product.product_id}
+              onClick={() =>
+                navigate(`details/${product.product_id}`, {
+                  state: { product, thisBrand }, // Passa il brand corretto
+                })
+              }
+            >
               <td>{product.name}</td>
               <td>{product.brand}</td>
               <td>{product.product_id}</td>
@@ -73,7 +46,7 @@ function ProductsTable({ brand}) {
               <td>{product.ean}</td>
               <td>{product.price}</td>
               <td>{product.quantity}</td>
-              <td>{product.inStock ? "si" : " no"}</td>
+              <td>{product.inStock ? "si" : "no"}</td>
               <td>{product.stockQuantity}</td>
             </tr>
           ))}
@@ -85,17 +58,17 @@ function ProductsTable({ brand}) {
         <Col className="text-center">
           <Form>
             <Button
-              onClick={() => setCurrentPage(currentPage - 1)}
+              onClick={() => handlePagination({ currentPage: Math.max(currentPage - 1, 1) })}
               disabled={currentPage === 1}
               className="mx-2"
             >
               Back
             </Button>
             <h5 className="d-inline mx-2">
-              {currentPage} / {totalPages}{" "}
+              {currentPage} / {totalPages}
             </h5>
             <Button
-              onClick={() => setCurrentPage(currentPage + 1)}
+              onClick={() => handlePagination({ currentPage: Math.min(currentPage + 1, totalPages) })}
               disabled={currentPage === totalPages}
               className="mx-2"
             >
@@ -103,10 +76,7 @@ function ProductsTable({ brand}) {
             </Button>
             <Form.Select
               value={limit}
-              onChange={(e) => {
-                setLimit(Number(e.target.value));
-                setCurrentPage(1);
-              }}
+              onChange={(e) => handlePagination({ limit: Number(e.target.value), currentPage: 1 })}
               className="mx-2"
               style={{ width: "auto" }}
             >
@@ -120,4 +90,5 @@ function ProductsTable({ brand}) {
     </>
   );
 }
+
 export default ProductsTable;

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 // ----- Models
 import Product from "../models/Product.js";
 
@@ -55,25 +55,56 @@ router.delete("/:id", async (req, res) => {
 });
 
 
-// -----GET -> prodotti per Brand  con impaginazione
+// -----GET -> prodotti per Brand con impaginazione e filtri
 router.get("/:brand", async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const sort = req.query.sort || "product_id";
-    const sortDirection = req.query.sortDirection === 'desc' ? 1 : -1;
-    const skip = (page-1)*limit;
+   
+    // Destrutturazione parametri di query
+    const {
+      // con assegnazione se non presente
+      page = 1,
+      limit = 10,
+      sort = "product_id",
+      sortDirection = 1,
+      //senza asseganzione
+      srcText,  
+      in_name,  
+      in_description
+    } = req.query;
 
-    const productsBrand = await Product.find({ brand: req.params.brand })
-    .sort({[sort]: sortDirection})
-    .skip(skip)
-    .limit(limit);
-    
-    const total = await  Product.countDocuments({ brand: req.params.brand });
+    const skip = (page - 1) * limit;
 
-    res.json({productsBrand,
-      currentPage: page,
-      totalPages: Math.ceil(total/limit),
+    let query = { brand: req.params.brand };
+
+    // se c'è testo applica filtri
+    if (srcText) {
+
+      if (in_name === "true" && in_description === "true") {
+        query.$and = [
+          { name: { $regex: srcText, $options: "i" } },
+          { description: { $regex: srcText, $options: "i" } }
+        ];
+      
+      } else if (in_name === "true") {
+        query.name = { $regex: srcText, $options: "i" };
+      
+      } else if (in_description === "true") {
+        query.description = { $regex: srcText, $options: "i" };
+      }
+    }
+
+    const products = await Product.find(query)
+      .sort({ [sort]: sortDirection })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Product.countDocuments(query);
+
+    // Risposta con i dati dei prodotti e dettagli di paginazione
+    res.json({
+      products,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
       totalProducts: total
     });
 

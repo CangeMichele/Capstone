@@ -5,28 +5,51 @@ import { Container } from "react-bootstrap";
 // ----- API -----
 import { getBrands } from "../../services/api.js";
 // ----- Componenti -----
-import BrandsProduct from "../../components/products/BrandsProduct.jsx";
+import NavBrands from "../../components/products/NavBrands.jsx";
 import ProductsSearchBar from "../../components/products/ProductsSearchBar.jsx";
-import ProductsTable from "../../components/products/ProductsTable.jsx";
-// ----- funzioni -----
-// import srcProductsFunction from "../../functions/srcProducts.js";
+import ProductsSearchHandler from "../../components/products/ProductsSearchHandler.jsx";
+import ProductsTable from "../../components/products/ProductsTable.jsx"
 
-const Products = () => {
-  // useState esterni per poterli utlizzare in tutti i componenti di ProductPage
-  //BRAND
+const ProductsPage = () => {
+  //Stato contenente tutti i documenti "brand" del db
   const [brands, setBrands] = useState([]);
+  // Stato contenente "brand" selezionato
   const [thisBrand, setThisBrand] = useState(null);
-  //RICERCA
-  const [search, setSearch] = useState("");
-  const handleSearch = (e) => setSearch(e.target.value);
-  const [srcParams, setSrcParams] = useState({
-    radioParams: {},
-    checkParams: { name: false, description: false },
+ 
+  //Stato parametri di ricerca
+  const [srcParams, setSrcParams] = useState({});
+  // Stato contenente risultato ricerca
+  const [srcResult, setSrcResult] = useState();
+
+
+  //Stato loader
+  const[loader, setLoader] = useState(false)
+
+// Satato submit
+  const [isSubmit, setIsSubmit] = useState(false);
+  // Callback che gestisce submit
+  const handleSubmit = () => {
+    setIsSubmit(true);
+  };
+  
+
+
+
+
+  
+  // Oggetto di stati per gestire impaginazione
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    limit: 10,
   });
 
-  // all'avvio estraggo tutti i dati del primo brand
+ 
+
+  // Al montaggio componente estraggo tutti i brand del db e popolo thisBrand con il primo
   useEffect(() => {
     const fetchBrands = async () => {
+      setLoader(true);
       try {
         const brandsData = await getBrands();
         setBrands(brandsData);
@@ -39,35 +62,77 @@ const Products = () => {
     fetchBrands();
   }, []);
 
-  // useEffect(() => {
-  //   srcProductsFunction(srcParams, thisBrand);
-  // }, [srcParams]);
+  // Callback che gestisce invio form di ricerca
+  const handleSearchSubmit = (newParams) => {
+    setSrcParams(newParams);
+  };
+
+  //Callback che gestisce risultato ricerca
+  const handlerSearchResult = (newResult) => {
+    setSrcResult(newResult);
+  }
+
+  //Callback che gestisce loader
+  const handleLoader = (status) =>{
+    setLoader(status);
+  }
+
+// Callback che gestisce i valori di impaginazione
+const handlePagination = (newValue) => {
+  
+  setPagination((prevState) => ({
+    ...prevState,
+    ...newValue,
+  }));
+};
 
   return (
     <Container>
 
-      {/* barra di ricerca */}
+      {/* BARRA DI RICERCA - popola srcParams secondo i settaggi*/}
       <ProductsSearchBar
         brands={brands}
         thisBrand={thisBrand}
-        search={search}
-        handleSearch={handleSearch}
         srcParams={srcParams}
         setSrcParams={setSrcParams}
+        onSearchSubmit={handleSearchSubmit}
+        handleSubmit={handleSubmit}
       />
-      <h1>{search}</h1>
 
-      {/* bottoni/schede brand */}
-      <BrandsProduct
+      {/* NAVIGAZIONE BRAND - seleziona brand di riferiemnto */}
+      <NavBrands
         brands={brands}
         thisBrand={thisBrand}
         setThisBrand={setThisBrand}
       />
 
-      {/* tabella prodotti */}
-      {thisBrand && <ProductsTable brand={thisBrand} />}{" "}
+      {/* RICERCA - se submit, api secondo srcParams*/}
+      {Object.keys(srcParams).length>0 && (
+        <ProductsSearchHandler
+          thisBrand={thisBrand}
+          srcParams={srcParams}
 
+          handlePagination={handlePagination}
+          pagination = {pagination}
+
+          searchResult={handlerSearchResult}
+          srcResult={srcResult}
+          
+          handleLoader={handleLoader}
+          
+          isSubmit={isSubmit}
+          handleSubmit={handleSubmit}
+        />
+      )}
+
+      {/* TABBELLA - visualizzazione prodotti */}
+   
+      {loader && (<div>Loading...</div>)}
+      {thisBrand &&  (
+        <ProductsTable srcResult={srcResult} pagination={pagination} handlePagination={handlePagination} thisBrand={thisBrand}
+        />
+      )}{" "}
     </Container>
   );
 };
-export default Products;
+export default ProductsPage;

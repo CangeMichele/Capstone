@@ -11,7 +11,9 @@ function ProductDetails() {
   const navigate = useNavigate(); 
 
   const { product } = location.state || {}; // Recupera l'oggetto product
-  const { brand } = location.state || {}; // Recupera l'oggetto product
+  const { thisBrand } = location.state || {}; // Recupera l'oggetto product
+  console.log(thisBrand);
+  
   
 
   return (
@@ -87,10 +89,10 @@ function ProductDetails() {
 
           <Card.Footer>
             <Card.Text>
-              <b>Ordini:</b> {brand.supplier.orderDays.join(', ')} 
+              <b>Ordini:</b> {thisBrand.supplier.orderDays.join(', ')} 
             <Card.Text>
             </Card.Text>
-              <b>Arrivi:</b> {brand.supplier.deliveryDays.join(', ')} 
+              <b>Arrivi:</b> {thisBrand.supplier.deliveryDays.join(', ')} 
             </Card.Text>
             <Button>Fornitore</Button>
           </Card.Footer>
