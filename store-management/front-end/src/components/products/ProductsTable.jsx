@@ -11,6 +11,7 @@ function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
 
   // Gestore navigazione
   const navigate = useNavigate();  
+  
 
   return (
     <>

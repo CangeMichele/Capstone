@@ -4,7 +4,7 @@ import api  from "./apiConfig";
 
 // ***** PRODUCTS ****
 
-// GET -> Tutti prodotti del brand
+// GET -> Prodotti del brand con ricerca
 export const getProductsBrand = async (brand, srcParams, pagination) => {
   try {
     //parametri query
@@ -34,32 +34,63 @@ export const getProductsBrand = async (brand, srcParams, pagination) => {
 };
 
 
-// GET -> Prodotto per Ean
-export const apiSrcByEan = async (ean)=>{
-try {
-  const response = await apiSrcByEan.get(`products/ean/${ean}`)
-  return response;
-} catch (error) {
-  console.error("Errore nella chiamata API apiSrcByEan:", error);
-    throw error; 
-}
-}
 
-//tutti i prodotti con impaginazione
-export const getAllProducts = async (currentPage, limit) => {
+// GET -> Tutti i prodotti del db con ricerca
+export const getProductsGlobal = async (srcParams, pagination) => {
   try {
-    const response = await api.get("/products", {
-      params : {
-        page: currentPage, 
-        limit: limit
-      },
-    });
-    return response.data;s
+
+    //parametri query
+    const queryParams = {
+      page: pagination.currentPage,
+      limit: pagination.limit,
+      srcText: srcParams.filter_value.srcText,
+      in_name: srcParams.filter_value.in_name,
+      in_description: srcParams.filter_value.in_description,
+    };    
+    console.log("queryParams",queryParams);
     
+
+    // invio richiesta api
+    const response = await api.get(`/products`, {
+      params: queryParams,
+    });
+
+    return response.data;
+  
   } catch (error) {
-    console.error("Errore nella chiamata API getAllProduct", error);
+    console.error("Errore nella chiamata API getProductsGlobal:", error);
+    throw error; // Propaga l'errore per essere gestito a livello superiore
+  }
+};
+
+
+
+
+// GET -> Prodotto per Ean
+export const getProductByEan = async (ean) => {
+  try {
+    const response = await api.get(`/products/ean/${ean}`);
+    return response.data; 
+  } catch (error) {
+    console.error("Errore nella chiamata API getProductByEan:", error);
     throw error;
   }
 };
+
+// GET -> Prodotto per Product_id
+export const getProductByProduct_id = async (id) => {
+  try {
+    const response = await api.get(`/products/prod_id/${id}`);
+    console.log("response.data prod_id: ", response.data);
+    
+    return response.data; 
+    
+  } catch (error) {
+    console.error("Errore nella chiamata API getProductByProduct_id:", error);
+    throw error;
+  }
+};
+
+
 
   

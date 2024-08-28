@@ -4,7 +4,7 @@ import Product from "../models/Product.js";
 
 const router = express.Router();
 
-
+// -----***** API sviluppo *****-----
 
 // -----POST/ -> inserimento nuovo prodotto / array prodotti
 router.post("/", async (req, res) => {
@@ -26,10 +26,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-
-
 // -----GET -> tutti i prodotti - DEBUG
-router.get("/", async (req, res) => {
+/*router.get("/", async (req, res) => {
   try {
     const product = await Product.find();
     res.json(product);
@@ -39,10 +37,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-
+*/
 
 // -----DELETE -> cancella articolo
-router.delete("/:id", async (req, res) => {
+router.delete("/prod_id/:id", async (req, res) => {
   try {
     const deleteProduct = await Product.findOneAndDelete({ product_id: req.params.id });
     if (!deleteProduct) {
@@ -55,19 +53,18 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// -----***** API form ricerca *****-----
 
-// -----GET -> prodotti per Brand con impaginazione e filtri
+// -----GET -> Ricerca su Brand con impaginazione e filtri
 router.get("/brand/:brand", async (req, res) => {
   try {
 
-    // Destrutturazione parametri di query
+    // Destrutturazione parametri query con asseganzioni se non definiti
     const {
-      // con assegnazione se non presente
       page = 1,
       limit = 10,
       sort = "product_id",
       sortDirection = 1,
-      //senza asseganzione
       srcText,
       in_name,
       in_description
@@ -79,18 +76,18 @@ router.get("/brand/:brand", async (req, res) => {
 
     // se c'è testo applica filtri
     if (srcText) {
+      const queryParams = [];
 
-      if (in_name === "true" && in_description === "true") {
-        query.$and = [
-          { name: { $regex: srcText, $options: "i" } },
-          { description: { $regex: srcText, $options: "i" } }
-        ];
+      if (in_name === "true") {
+        queryParams.push({ name: { $regex: srcText, $options: "i" } });
+      }
 
-      } else if (in_name === "true") {
-        query.name = { $regex: srcText, $options: "i" };
+      if (in_description === "true") {
+        queryParams.push({ description: { $regex: srcText, $options: "i" } });
+      }
 
-      } else if (in_description === "true") {
-        query.description = { $regex: srcText, $options: "i" };
+      if (queryParams.length > 0) {
+        query.$and = queryParams;
       }
     }
 
@@ -115,14 +112,91 @@ router.get("/brand/:brand", async (req, res) => {
 });
 
 
-// -----GET -> Prodotti per EAN
+
+// -----GET -> ricerca Globale con impaginazione e filtri
+router.get("/", async (req, res) => {
+  try {
+
+    // Destrutturazione parametri query con asseganzioni se non definiti
+    const {
+      page = 1,
+      limit = 10,
+      sort = "product_id",
+      sortDirection = 1,
+      srcText,
+      in_name,
+      in_description
+    } = req.query;
+
+    const skip = (page - 1) * limit;
+
+    let query = {};
+
+    // se c'è testo applica filtri
+    if (srcText) {
+
+      if (in_name === "true") {
+        query.$and = [
+          { name: { $regex: srcText, $options: "i" } }
+        ];
+      }
+
+      if (in_description === "true") {
+        query.$and = [
+          { description: { $regex: srcText, $options: "i" } }
+        ];
+      }
+    }
+    console.log("query",query);
+    
+    const products = await Product.find(query)
+      .sort({ [sort]: sortDirection })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Product.countDocuments(query);
+
+    // Risposta con i dati dei prodotti e dettagli di paginazione
+    res.json({
+      products,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / limit),
+      totalProducts: total
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+
+// -----GET -> Ricerca prodotto per EAN
 router.get("/ean/:ean", async (req, res) => {
   try {
     const product = await Product.findOne({ ean: req.params.ean })
     if (!product) {
       return res.status(404).json({ message: "Articolo non trovato" })
     }
-    res.json(Blog);
+    res.json({ products: [product] });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+  }
+});
+
+
+
+// -----GET -> Ricerca prodotto per Product_id
+router.get("/prod_id/:id", async (req, res) => {
+  try {
+    const product = await Product.findOne({ product_id: req.params.id })
+    if (!product) {
+      return res.status(404).json({ message: "Articolo non trovato" })
+    }
+    console.log(product);
+
+    res.json({ products: [product] });
   } catch (error) {
     res.status(500).json({ message: error.message });
 

@@ -68,7 +68,11 @@ function ProductsSearchBar({
 
         setSrcParams({
           filter_name: selectedRadio,
-          filter_value: { selectedCheck, srcText: search },
+          filter_value: {
+            srcText: search,
+            in_name: selectedCheck.name,
+            in_description: selectedCheck.description,
+          },
         });
         break;
 

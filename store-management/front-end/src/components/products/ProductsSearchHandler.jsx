@@ -1,7 +1,7 @@
 // ----- React -----
 import React, { useEffect, useState } from "react";
 // ----- API -----
-import {getProductsBrand, apiSrcByEan  } from "../../services/apiProducts.js";
+import {getProductsBrand, getProductByEan, getProductByProduct_id, getProductsGlobal  } from "../../services/apiProducts.js";
 
 function ProductsSearchHandler({
   thisBrand,
@@ -21,35 +21,46 @@ function ProductsSearchHandler({
     const fetchProductsOnSubmit = async () => {
       handleLoader(true);
       try {
-        let result;
+        let prodResult = {};
         switch (srcParams.filter_name) {
+          
           case "brand":            
-            result = await getProductsBrand(thisBrand.name, srcParams, pagination);
+          prodResult = await getProductsBrand(thisBrand.name, srcParams, pagination);  
             break;
-          // case "global":
-          //   result = await apiSrcInGlobal(srcParams, pagination);
-          //   break;
-           case "ean":
-             result = await apiSrcByEan(srcParams, pagination);
+         
+             case "global":
+              prodResult = await getProductsGlobal(srcParams, pagination);
+              console.log("ricerca globale: ", prodResult);
+
              break;
-          // case "product_id":
-          //   result = await apiSrcByProductId(srcParams, pagination);
-          //   break;
-          // default:
-          //   console.error("Richiesta non riconosciuta");
-          //   return;
+
+           case "ean":
+            prodResult = await getProductByEan(srcParams.filter_value);
+             console.log("ricerca per ean: ", prodResult);
+             break;
+
+           case "product_id":
+            prodResult = await getProductByProduct_id(srcParams.filter_value);
+             console.log("ricerca per product_id: ", prodResult);
+
+             break;
+
+           default:
+             console.error("Richiesta non riconosciuta");
+             return;
         }
 
-        if (result) {
-          searchResult(result.products);  // Aggiorna i risultati di ricerca
-          handlePagination({ totalPages: result.totalPages });  // Aggiorna la paginazione
+        if (prodResult) {
+
+          searchResult(prodResult.products);  // Aggiorna i risultati di ricerca
+          handlePagination({ totalPages: prodResult.totalPages });  // Aggiorna la paginazione
         }
       } catch (error) {
         console.error("Errore nella richiesta dei prodotti:", error);
       } finally {
         handleLoader(false);
-        setisSubmit(false);// Reset del submit dopo l'esecuzione della ricerca
-          console.log("submit reset: ", isSubmit);
+        // setisSubmit(false);// Reset del submit dopo l'esecuzione della ricerca
+          // console.log("submit reset: ", isSubmit);
           
       }
     };
