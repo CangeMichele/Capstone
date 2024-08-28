@@ -4,7 +4,7 @@ import React from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 
 
-function NavBrands({ brands, thisBrand, setThisBrand }) {
+function NavBrands({ brands, thisBrand, handleThisBrand }) {
  
 
 
@@ -20,7 +20,7 @@ function NavBrands({ brands, thisBrand, setThisBrand }) {
                 ? "primary"
                 : "secondary"
             }
-            onClick={() => setThisBrand(brand)}
+            onClick={() => handleThisBrand(brand)}
           >
             {brand.name}
           </Button>

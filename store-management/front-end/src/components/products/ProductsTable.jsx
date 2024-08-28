@@ -14,8 +14,9 @@ function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
 
   return (
     <>
-      {/* --- visualizzo i prodotti in formato tabella --- */}
-      <Table striped bordered hover size="sm">
+      {/* --- Se ci sono riusltati visualizzo i prodotti in formato tabella --- */}
+      {srcResult && srcResult.length>0 && ( 
+        <Table striped bordered hover size="sm">
         <thead>
           <tr>
             <th>Name</th>
@@ -52,6 +53,12 @@ function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
           ))}
         </tbody>
       </Table>
+        )}
+      
+      {/* --- Se non ci sono riusltati visualizzo errore --- */}
+        { srcResult && srcResult.length === 0 && (
+          <h3>Nessun dato trovato</h3>
+        )}
 
       {/* --- barra di navigazione pagine --- */}
       <Row className="justify-content-center align-items-center my-3">

@@ -1,11 +1,14 @@
+// ----- React -----
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+// ----- stilizzazione -----
 import { Row, Col, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+// ----- funzioni & api per login -----
 import { isLogUser } from "../../functions/isLogUser";
-import { getUserData } from "../../services/api.js";
+import { getUserData } from "../../services/apiUser.js";
+
+
 const Home = () => {
   // ---- funzione che controlla se utente loggato, se no rimanda al login
   isLogUser();

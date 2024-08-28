@@ -6,11 +6,10 @@ import "./ProductsSearchBar.css";
 
 function ProductsSearchBar({
   thisBrand,
-  srcParams,
   setSrcParams,
-  onSearchSubmit,
-  handleSubmit 
-  
+  handleSubmitState,
+  isSubmit,
+  setIsSubmit
 }) {
   // Stato del testo di input
   const [search, setSearch] = useState("");
@@ -28,7 +27,7 @@ function ProductsSearchBar({
   // Stato per gestire errori
   const [errorParams, setErrorParams] = useState("");
 
-  // Imposta di default radio su "brand" e check su name aggiornandosi al cambio search e brand
+  // Imposta di default radio su "brand" e check su "name" aggiornandosi al cambio search e brand
   useEffect(() => {
     if (thisBrand) {
       setSelectedRadio("brand");
@@ -38,6 +37,8 @@ function ProductsSearchBar({
 
   // Aggiorna srcParams con dati form e verifica validità
   useEffect(() => {
+    
+    
     switch (selectedRadio) {
       case "brand":
         setErrorParams( selectedCheck.name === false && selectedCheck.description === false ? "brand" : "" ),
@@ -53,7 +54,18 @@ function ProductsSearchBar({
         break;
 
       case "global":
-        setErrorParams( !search  && selectedCheck.name === false && selectedCheck.description === false ? "global" : "" );
+        setErrorParams(() => {
+          if (search === "") {
+            return "srcText";
+          } 
+          
+          if (selectedCheck.name === false && selectedCheck.description === false) {
+            return errorParams +"Global";
+          } else {
+            return "";
+          }
+        });
+
         setSrcParams({
           filter_name: selectedRadio,
           filter_value: { selectedCheck, srcText: search },
@@ -116,7 +128,9 @@ const handleSubmitForm = (e) => {
   if (errorParams) {
     switch (errorParams) {
       case "brand":
-      case "global":
+      case "Global":
+      case "srcText":
+      case "srcTextGlobal":
         console.error(
           `Errore nella richiesta ${errorParams}: parametri non sufficienti`
         );
@@ -135,13 +149,11 @@ const handleSubmitForm = (e) => {
     }
   }
 
-  // Callback per parametri form
-  onSearchSubmit(srcParams);
-  //callabck avviso form inviato
-  handleSubmit();
-
-
+  //  stato del submit
+  setIsSubmit(true);
+  
   console.log("Inviato", search);
+  
 };
 
 
@@ -162,6 +174,7 @@ const handleSubmitForm = (e) => {
 
         {/* Barra di ricerca */}
         <Form.Control
+        className={ errorParams === "srcText" || errorParams === "srcTextGlobal" ? "src-error-class" : "" }
           type="search"
           placeholder="ricerca..."
           value={search}
@@ -185,6 +198,7 @@ const handleSubmitForm = (e) => {
               label={thisBrand.name}
             />
             <Form.Check // GLOBALE
+              
               type="radio"
               id="filterGlobal"
               name="radioParams"
@@ -196,7 +210,7 @@ const handleSubmitForm = (e) => {
 
           <Col
             className={
-              errorParams === "global" || errorParams === "brand"
+              errorParams === "Global" || errorParams === "srcTextGlobal" || errorParams === "brand"
                 ? "src-error-class"
                 : ""
             }

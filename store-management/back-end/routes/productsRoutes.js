@@ -8,7 +8,6 @@ const router = express.Router();
 
 // -----POST/ -> inserimento nuovo prodotto / array prodotti
 router.post("/", async (req, res) => {
-
   try {
     //se non è un array crea un array con il singolo elemento
     const productsData = Array.isArray(req.body) ? req.body : [req.body];
@@ -29,7 +28,7 @@ router.post("/", async (req, res) => {
 
 
 
-// -----GET -> tutti i prodotti
+// -----GET -> tutti i prodotti - DEBUG
 router.get("/", async (req, res) => {
   try {
     const product = await Product.find();
@@ -39,6 +38,8 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+
 
 // -----DELETE -> cancella articolo
 router.delete("/:id", async (req, res) => {
@@ -56,9 +57,9 @@ router.delete("/:id", async (req, res) => {
 
 
 // -----GET -> prodotti per Brand con impaginazione e filtri
-router.get("/:brand", async (req, res) => {
+router.get("/brand/:brand", async (req, res) => {
   try {
-   
+
     // Destrutturazione parametri di query
     const {
       // con assegnazione se non presente
@@ -67,8 +68,8 @@ router.get("/:brand", async (req, res) => {
       sort = "product_id",
       sortDirection = 1,
       //senza asseganzione
-      srcText,  
-      in_name,  
+      srcText,
+      in_name,
       in_description
     } = req.query;
 
@@ -84,10 +85,10 @@ router.get("/:brand", async (req, res) => {
           { name: { $regex: srcText, $options: "i" } },
           { description: { $regex: srcText, $options: "i" } }
         ];
-      
+
       } else if (in_name === "true") {
         query.name = { $regex: srcText, $options: "i" };
-      
+
       } else if (in_description === "true") {
         query.description = { $regex: srcText, $options: "i" };
       }
@@ -113,5 +114,19 @@ router.get("/:brand", async (req, res) => {
   }
 });
 
+
+// -----GET -> Prodotti per EAN
+router.get("/ean/:ean", async (req, res) => {
+  try {
+    const product = await Product.findOne({ ean: req.params.ean })
+    if (!product) {
+      return res.status(404).json({ message: "Articolo non trovato" })
+    }
+    res.json(Blog);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+  }
+});
 
 export default router;
