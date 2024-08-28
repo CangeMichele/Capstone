@@ -34,6 +34,17 @@ export const getProductsBrand = async (brand, srcParams, pagination) => {
 };
 
 
+// GET -> Prodotto per Ean
+export const apiSrcByEan = async (ean)=>{
+try {
+  const response = await apiSrcByEan.get(`products/ean/${ean}`)
+  return response;
+} catch (error) {
+  console.error("Errore nella chiamata API apiSrcByEan:", error);
+    throw error; 
+}
+}
+
 //tutti i prodotti con impaginazione
 export const getAllProducts = async (currentPage, limit) => {
   try {

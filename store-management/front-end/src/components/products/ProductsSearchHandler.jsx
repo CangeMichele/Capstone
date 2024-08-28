@@ -1,7 +1,7 @@
 // ----- React -----
 import React, { useEffect, useState } from "react";
 // ----- API -----
-import {getProductsBrand  } from "../../services/apiProducts.js";
+import {getProductsBrand, apiSrcByEan  } from "../../services/apiProducts.js";
 
 function ProductsSearchHandler({
   thisBrand,
@@ -29,9 +29,9 @@ function ProductsSearchHandler({
           // case "global":
           //   result = await apiSrcInGlobal(srcParams, pagination);
           //   break;
-          // case "ean":
-          //   result = await apiSrcByEan(srcParams, pagination);
-          //   break;
+           case "ean":
+             result = await apiSrcByEan(srcParams, pagination);
+             break;
           // case "product_id":
           //   result = await apiSrcByProductId(srcParams, pagination);
           //   break;
