@@ -46,9 +46,7 @@ export const getProductsGlobal = async (srcParams, pagination) => {
       srcText: srcParams.filter_value.srcText,
       in_name: srcParams.filter_value.in_name,
       in_description: srcParams.filter_value.in_description,
-    };    
-    console.log("queryParams",queryParams);
-    
+    };        
 
     // invio richiesta api
     const response = await api.get(`/products`, {
@@ -80,11 +78,8 @@ export const getProductByEan = async (ean) => {
 // GET -> Prodotto per Product_id
 export const getProductByProduct_id = async (id) => {
   try {
-    const response = await api.get(`/products/prod_id/${id}`);
-    console.log("response.data prod_id: ", response.data);
-    
-    return response.data; 
-    
+    const response = await api.get(`/products/prod_id/${id}`);    
+    return response.data;     
   } catch (error) {
     console.error("Errore nella chiamata API getProductByProduct_id:", error);
     throw error;

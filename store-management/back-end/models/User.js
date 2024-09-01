@@ -55,6 +55,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  birthDate: { 
+    type: Date, 
+    required: true 
+  },
   userId: {
     type: Number,
     unique: true

@@ -147,8 +147,7 @@ router.get("/", async (req, res) => {
         ];
       }
     }
-    console.log("query",query);
-    
+        
     const products = await Product.find(query)
       .sort({ [sort]: sortDirection })
       .skip(skip)

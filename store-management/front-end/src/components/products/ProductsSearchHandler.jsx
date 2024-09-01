@@ -30,18 +30,15 @@ function ProductsSearchHandler({
          
              case "global":
               prodResult = await getProductsGlobal(srcParams, pagination);
-              console.log("ricerca globale: ", prodResult);
 
              break;
 
            case "ean":
             prodResult = await getProductByEan(srcParams.filter_value);
-             console.log("ricerca per ean: ", prodResult);
              break;
 
            case "product_id":
             prodResult = await getProductByProduct_id(srcParams.filter_value);
-             console.log("ricerca per product_id: ", prodResult);
 
              break;
 
@@ -60,7 +57,6 @@ function ProductsSearchHandler({
       } finally {
         handleLoader(false);
         // setisSubmit(false);// Reset del submit dopo l'esecuzione della ricerca
-          // console.log("submit reset: ", isSubmit);
           
       }
     };

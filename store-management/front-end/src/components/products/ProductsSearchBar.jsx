@@ -1,7 +1,16 @@
 // ----- react
 import React, { useEffect, useState } from "react";
 // ----- stilizzazione
-import { Form, InputGroup, Button, Row, Col } from "react-bootstrap";
+import {
+  Form,
+  InputGroup,
+  Button,
+  Row,
+  Col,
+  Collapse,
+  Container,
+} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./ProductsSearchBar.css";
 
 function ProductsSearchBar({
@@ -9,7 +18,7 @@ function ProductsSearchBar({
   setSrcParams,
   handleSubmitState,
   isSubmit,
-  setIsSubmit
+  setIsSubmit,
 }) {
   // Stato del testo di input
   const [search, setSearch] = useState("");
@@ -24,24 +33,41 @@ function ProductsSearchBar({
     name: false,
     description: false,
   });
-  // Stato per gestire errori
-  const [errorParams, setErrorParams] = useState("");
 
-  // Imposta di default radio su "brand" e check su "name" aggiornandosi al cambio search e brand
+  // Stato per gestire errori
+  const [errorCode, setErrorCode] = useState("");
+  // Oggetto descrizione errori
+  const errorList = {
+    "01" : "Campo di ricerca vuoto",
+    "02" : "Filtri di ricerca non selezionati",
+    "03" : "Valore non numerico",
+    "04" : "Lunghezza errata", // per ean
+    "05" : "Lunghezza errata" //per product_id
+  }
+
+  // Stato per gestire validazioneo module
+  const [validated, setValidated] = useState(false);
+
+  // Imposta di default radio su "brand" e check su "name" aggiornandosi al cambio di  brand
   useEffect(() => {
     if (thisBrand) {
       setSelectedRadio("brand");
       setSelectedCheck({ name: true, description: false });
     }
-  }, [thisBrand, search]);
+  }, [thisBrand]);
 
-  // Aggiorna srcParams con dati form e verifica validità
   useEffect(() => {
+    // Reset errorCode
+    setErrorCode("");
+    setValidated(false);
     
-    
+
+    // Aggiorna srcParams con dati form e verifica validità
     switch (selectedRadio) {
       case "brand":
-        setErrorParams( selectedCheck.name === false && selectedCheck.description === false ? "brand" : "" ),
+        if (!selectedCheck.name && !selectedCheck.description) {
+          setErrorCode("02");
+        } else {
           setSrcParams({
             filter_name: selectedRadio,
             filter_value: {
@@ -51,45 +77,48 @@ function ProductsSearchBar({
               in_description: selectedCheck.description,
             },
           });
+        }
         break;
 
       case "global":
-        setErrorParams(() => {
-          if (search === "") {
-            return "srcText";
-          } 
-          
-          if (selectedCheck.name === false && selectedCheck.description === false) {
-            return errorParams +"Global";
-          } else {
-            return "";
-          }
-        });
-
-        setSrcParams({
-          filter_name: selectedRadio,
-          filter_value: {
-            srcText: search,
-            in_name: selectedCheck.name,
-            in_description: selectedCheck.description,
-          },
-        });
+        if (search === "") {
+          setErrorCode("01");
+        } else if (!selectedCheck.name && !selectedCheck.description) {
+          setErrorCode("02");
+        } else {
+          setSrcParams({
+            filter_name: selectedRadio,
+            filter_value: {
+              srcText: search,
+              in_name: selectedCheck.name,
+              in_description: selectedCheck.description,
+            },
+          });
+        }
         break;
 
       case "ean":
-        //conrolla se numerico e se lungo 13
-        setErrorParams(
-         search !== "" && /^[0-9]+$/.test(search) && search.length === 13 ? "" : "ean"
-        );
-        setSrcParams({ filter_name: selectedRadio, filter_value: search });
+        if (search === "") {
+          setErrorCode("01");
+        } else if (!/^[0-9]+$/.test(search)) {
+          setErrorCode("03");
+        } else if (search.length !== 13) {
+          setErrorCode("04");
+        } else {
+          setSrcParams({ filter_name: selectedRadio, filter_value: search });
+        }
         break;
 
       case "product_id":
-        //conrolla se numerico e se lungo 6
-        setErrorParams(
-          search !== "" &&/^[0-9]+$/.test(search) && search.length === 6 ? "" : "product_id"
-        );
-        setSrcParams({ filter_name: selectedRadio, filter_value: search });
+        if (search === "") {
+          setErrorCode("01");
+        } else if (!/^[0-9]+$/.test(search)) {
+          setErrorCode("03");
+        } else if (search.length !== 6) {
+          setErrorCode("05");
+        } else {
+          setSrcParams({ filter_name: selectedRadio, filter_value: search });
+        }
         break;
     }
   }, [search, selectedRadio, selectedCheck]);
@@ -124,169 +153,140 @@ function ProductsSearchBar({
     }));
   };
 
- // Gestisce il submit del form che fa partire la ricerca
-const handleSubmitForm = (e) => {
-  e.preventDefault();
+  // Gestisce il submit del form che fa partire la ricerca
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
 
-  // Controlla se ci sono errori nei parametri
-  if (errorParams) {
-    switch (errorParams) {
-      case "brand":
-      case "Global":
-      case "srcText":
-      case "srcTextGlobal":
-        console.error(
-          `Errore nella richiesta ${errorParams}: parametri non sufficienti`
-        );
-        return;
+    const form = e.currentTarget;
+    // Controlla la validità del modulo
 
-      case "ean":
-      case "product_id": // Correzione: era scritto "product:_id"
-        console.error(
-          `Errore nella richiesta ${errorParams}: formato non valido`
-        );
-        return;
-
-      default:
-        console.error(`Errore sconosciuto: ${errorParams}`);
-        return;
+    // Controlla se ci sono errori nei parametri
+    if (errorCode) {
+      console.error(errorList[errorCode]);
+    } else {
+      setIsSubmit(true);
+      setValidated(true); // Imposta lo stato di validazione come true
+      console.log("Inviato", search);
     }
-  }
-
-  //  stato del submit
-  setIsSubmit(true);
-  
-  console.log("Inviato", search);
-  
-};
-
+  };
 
   return (
-    <Form onSubmit={handleSubmitForm}>
+    <Form noValidate validated={validated} onSubmit={handleSubmitForm}>
       <InputGroup className="mb-3">
         {/* Mostra o nasconde i parametri di ricerca avanzata */}
         <Button
           variant="outline-secondary"
-          id="button-addon1"
           onClick={() => setSrcAdvanced((prevState) => !prevState)}
+          aria-controls="collapse-srcAdvanced"
+          aria-expanded={srcAdvanced}
         >
           {srcAdvanced ? <span>&#9650;</span> : <span>&#9660;</span>}
         </Button>
-        <Button type="submit" variant="outline-secondary" >
+        <Button type="submit" variant="outline-secondary">
           Cerca
         </Button>
 
         {/* Barra di ricerca */}
         <Form.Control
-        className={ errorParams === "srcText" || errorParams === "srcTextGlobal" ? "src-error-class" : "" }
           type="search"
           placeholder="ricerca..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          isInvalid={errorCode}
         />
+        <Form.Control.Feedback type="invalid">
+          {errorList[errorCode]}
+        </Form.Control.Feedback>
       </InputGroup>
 
       {/* Form di ricerca avanzata */}
-      {thisBrand && srcAdvanced && (
-        <Row>
-          <Col>
-            <p>Ricerca avanzata</p>
-          </Col>
-          <Col>
-            <Form.Check // BRAND
-              type="radio"
-              id="filterBrand"
-              name="radioParams"
-              checked={selectedRadio === "brand"}
-              onChange={() => handleButtonRadioChange("brand")}
-              label={thisBrand.name}
-            />
-            <Form.Check // GLOBALE
-              
-              type="radio"
-              id="filterGlobal"
-              name="radioParams"
-              checked={selectedRadio === "global"}
-              onChange={() => handleButtonRadioChange("global")}
-              label="Globale"
-            />
-          </Col>
+      <Collapse in={srcAdvanced}>
+        <Container id="collapse-srcAdvanced">
+          {thisBrand && (
+            <Row>
+              <Col>
+                <p>Ricerca avanzata</p>
+              </Col>
+              <Col>
+                <Form.Check // BRAND
+                  type="radio"
+                  id="filterBrand"
+                  name="radioParams"
+                  checked={selectedRadio === "brand"}
+                  onChange={() => handleButtonRadioChange("brand")}
+                  label={thisBrand.name}
+                />
+                <Form.Check // GLOBALE
+                  type="radio"
+                  id="filterGlobal"
+                  name="radioParams"
+                  checked={selectedRadio === "global"}
+                  onChange={() => handleButtonRadioChange("global")}
+                  label="Globale"
+                />
+              </Col>
 
-          <Col
-            className={
-              errorParams === "Global" || errorParams === "srcTextGlobal" || errorParams === "brand"
-                ? "src-error-class"
-                : ""
-            }
-          >
-            <Form.Check // NOME
-              type="checkbox"
-              id="filterName"
-              name="checkParams"
-              label="Nome prodotto"
-              checked={selectedCheck.name ? true : false}
-              onChange={() => handleButtonCheckChange("name")}
-              disabled={
-                selectedRadio === "ean" || selectedRadio === "product_id"
-                  ? true
-                  : false
-              }
-            />
-            <Form.Check // DESCRIZIONE
-              type="checkbox"
-              id="filterDescription"
-              name="checkParams"
-              label="Descrizione prodotto"
-              checked={selectedCheck.description ? true : false}
-              onChange={() => handleButtonCheckChange("description")}
-              disabled={
-                selectedRadio === "ean" || selectedRadio === "product_id"
-                  ? true
-                  : false
-              }
-            />
-          </Col>
+              <Col>
+                <Form.Check // NOME
+                  type="checkbox"
+                  id="filterName"
+                  name="checkParams"
+                  label="Nome prodotto"
+                  checked={selectedCheck.name ? true : false}
+                  onChange={() => handleButtonCheckChange("name")}
+                  disabled={
+                    selectedRadio === "ean" || selectedRadio === "product_id"
+                      ? true
+                      : false
+                  }
+                  isInvalid={errorCode === "02"}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Selezionare almeno un parametro
+                </Form.Control.Feedback>
 
-          <Col>
-            <Form.Check // EAN
-              type="radio"
-              id="filterEan"
-              name="radioParams"
-              checked={selectedRadio === "ean"}
-              onChange={() => handleButtonRadioChange("ean")}
-              label={
-                <>
-                  EAN
-                  {errorParams === "ean" && (
-                    <span className="invalid-message">
-                      {" "}
-                      (formato non valido)
-                    </span>
-                  )}
-                </>
-              }
-            />
-            <Form.Check // CODICE
-              type="radio"
-              id="filterProduct_id"
-              name="radioParams"
-              checked={selectedRadio === "product_id"}
-              onChange={() => handleButtonRadioChange("product_id")}
-              label={
-                <>
-                  Codice
-                  {errorParams === "product_id" && (
-                    <span className="invalid-message">
-                      {" "}
-                      (formato non valido)
-                    </span>
-                  )}
-                </>
-              }
-            />
-          </Col>
-        </Row>
-      )}
+                <Form.Check // DESCRIZIONE
+                  type="checkbox"
+                  id="filterDescription"
+                  name="checkParams"
+                  label="Descrizione prodotto"
+                  checked={selectedCheck.description ? true : false}
+                  onChange={() => handleButtonCheckChange("description")}
+                  disabled={
+                    selectedRadio === "ean" || selectedRadio === "product_id"
+                      ? true
+                      : false
+                  }
+                  isInvalid={errorCode === "02"}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Selezionare almeno un parametro
+                </Form.Control.Feedback>
+              </Col>
+
+              <Col>
+                <Form.Check // EAN
+                  type="radio"
+                  id="filterEan"
+                  name="radioParams"
+                  checked={selectedRadio === "ean"}
+                  onChange={() => handleButtonRadioChange("ean")}
+                  label="EAN"
+                  isInvalid={errorCode === "03" || errorCode === "04"}
+                />
+                <Form.Check // CODICE
+                  type="radio"
+                  id="filterProduct_id"
+                  name="radioParams"
+                  checked={selectedRadio === "product_id"}
+                  onChange={() => handleButtonRadioChange("product_id")}
+                  label="codice"
+                />
+              </Col>
+            </Row>
+          )}
+        </Container>
+      </Collapse>
     </Form>
   );
 }

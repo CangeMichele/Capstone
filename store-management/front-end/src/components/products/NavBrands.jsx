@@ -1,7 +1,7 @@
 // ----- React -----
 import React from "react";
 // ----- stilizzazione -----
-import { Button, ButtonGroup } from "react-bootstrap";
+import { Button, ButtonGroup, ButtonToolbar } from "react-bootstrap";
 
 
 function NavBrands({ brands, thisBrand, handleThisBrand }) {
@@ -10,6 +10,7 @@ function NavBrands({ brands, thisBrand, handleThisBrand }) {
 
   return (
     <>
+    <ButtonToolbar className="mb-3">
       <ButtonGroup aria-label="Basic example">
         
         {brands.map((brand, i) => (
@@ -27,6 +28,7 @@ function NavBrands({ brands, thisBrand, handleThisBrand }) {
         ))}
 
       </ButtonGroup>
+      </ButtonToolbar>
 
     
     </>
