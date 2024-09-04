@@ -18,6 +18,7 @@ const CostumerSchema = new mongoose.Schema({
   taxCode: {
     type: String,
     required: true,
+    unique:true,
     trim: true
   },
   birthDate: { 
@@ -27,7 +28,6 @@ const CostumerSchema = new mongoose.Schema({
   placeOfBirth:{
     city: { type: String, required: true },
     province: { type: String, required: true },
-    postalCode: { type: String, required: true},
     country: { type: String, required: true, default: "Italia" },
   },
   sex: {
@@ -60,13 +60,15 @@ const CostumerSchema = new mongoose.Schema({
   },
   lastStore: {
     type: String,
-    required: true,
+    default:"",
     trim: true
   },
   isActive: {
     type: Boolean,
+    required: true,
     default: true
   }
+
  
 }, {
   timestamps: true,

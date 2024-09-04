@@ -8,7 +8,7 @@ import listEndpoints from "express-list-endpoints";
 import authRoutes from "./routes/authRoutes.js";
 import storesRoutes from "./routes/storesRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
-import costumersRoutes from "./routes/costumersRoutes.js";
+import customersRoutes from "./routes/customersRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 // ----- middleware
@@ -41,7 +41,7 @@ mongoose
 app.use("/api/auth", authRoutes); 
 app.use("/api/stores", storesRoutes); 
 app.use("/api/users", usersRoutes); 
-app.use("/api/costumers", costumersRoutes);
+app.use("/api/customers", customersRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/brand", brandRoutes);
 
