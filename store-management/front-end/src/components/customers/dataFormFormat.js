@@ -3,8 +3,6 @@ import { formatDate } from "../../functions/formatDate";
 
 
 export const dataFormFormat = (customer) => {
-    console.log("dataFormFormat: customer",customer);
-
     // Check if placeOfBirth is defined
     const placeOfBirth = customer.placeOfBirth || {};
 
@@ -14,7 +12,7 @@ export const dataFormFormat = (customer) => {
     // Check if address array exists within contact and has at least one element
     const address = contact.address && contact.address.length > 0 ? contact.address[0] : {};
 
-    const formData = {
+    const formattedData = {
         firstName: customer.firstName,
         lastName: customer.lastName,
         taxCode: customer.taxCode,
@@ -42,9 +40,9 @@ export const dataFormFormat = (customer) => {
         lastStore: customer.lastStore || '',
         preferredStore: customer.preferredStore || '',
         isActive: customer.isActive ? "ATTIVA" : "NON ATTIVA",
+        id: customer._id,
     };
-    console.log("formData: ", formData);
     
 
-    return formData;
+    return formattedData;
 }

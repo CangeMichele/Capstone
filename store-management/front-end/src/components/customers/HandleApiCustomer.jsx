@@ -1,9 +1,7 @@
 // ----- API -----
-import { formatDate } from "../../functions/formatDate.js";
-import { postNewCustomer, getSrcCustomers } from "../../services/apiCustomer.js";
+import { postNewCustomer, getSrcCustomers, patchCustomer } from "../../services/apiCustomer.js";
 // ----- Funzioni -----
 import { dataFormFormat } from "./dataFormFormat.js";
-
 
 // ----- ----- ----- Gestore creazione nuovo cliente ----- ----- -----
 export const handleNewCustomer = async (customerData) => {
@@ -40,25 +38,38 @@ export const handleNewCustomer = async (customerData) => {
   console.log("newCustomer: ", JSON.stringify(newCustomer));
 
   const response = await postNewCustomer(newCustomer);
+};
 
+// ----- ----- ----- Gestore Modifica cliente ----- ----- -----
+export const handleEditCustomer = async (editCustomer, selectedCustomer) => {
+
+  const idCustomer = selectedCustomer.id;
+  const editFields = {};
+
+  // Confronta editCustomer e selectedCustomer e popola editFields
+  Object.keys(selectedCustomer).forEach((key) => {
+    if (selectedCustomer[key] !== editCustomer[key]) {
+      editFields[key] = editCustomer[key];
+    }
+  });
+
+  if (!Object.keys(editFields).length) {
+    return;
+  }
+
+  console.log("editFields: ", editFields);
+
+  const response = await patchCustomer(editFields, idCustomer);
   console.log(response);
 };
 
-// ----- Gestore Modifica nuovo cliente -----
-export const handleEditCustomer = async (editCustomer) => {
-  console.log(editCustomer);
-};
-
-// -----  ----- ----- Ricerca cliente ----- ----- ----- 
-export const handleSearchCustomer = async (srcParams, setSrcResult) => {
-  
-  const response= await getSrcCustomers(srcParams)
-  console.log("response:", response);
-
-  response.forEach(customer => {
-    const formattedCustomer = dataFormFormat(customer);
-    setSrcResult((prevSrcResult) => prevSrcResult.concat(formattedCustomer));
+// -----  ----- ----- Ricerca cliente ----- ----- -----
+export const handleSearchCustomer = async (srcParams) => {
+  const response = await getSrcCustomers(srcParams);
+  const formattedCustomer = [];
+  response.forEach((customer) => {
+    formattedCustomer.push(dataFormFormat(customer));
   });
-  
-};
 
+  return formattedCustomer;
+};

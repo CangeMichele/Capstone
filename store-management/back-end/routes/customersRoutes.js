@@ -1,3 +1,4 @@
+// ----- Express -----
 import express from "express";
 // ----- Modelli ----
 import Customer from "../models/Customer.js";
@@ -5,7 +6,7 @@ import Customer from "../models/Customer.js";
 const router = express.Router();
 
 
-// -----POST/ -> nuovo cliente
+// ----- POST/ -> nuovo cliente
 router.post("/", async (req, res) => {
     try {
       const customer = new Customer(req.body);
@@ -21,11 +22,8 @@ router.post("/", async (req, res) => {
   });
 
 
-  // -----GET -> estrapolazione clienti
-router.get("/", async (req, res) => {
-
-  
-  
+  // ----- GET -> estrapolazione clienti
+router.get("/", async (req, res) => {  
   try {
     // Estrapola dati dalla richiesta
     const { firstName, lastName, taxCode } = req.query;
@@ -44,6 +42,20 @@ router.get("/", async (req, res) => {
     }
   });
 
+
+
+  // ----- PATCH -> Modifica cliente
+  router.patch("/:id", async(req, res) =>{
+    // ricerca per id e carica modifiche
+    try {
+      const updateCustomer = await Customer.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      res.json(updateCustomer);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  })
 
 
 export default router;
