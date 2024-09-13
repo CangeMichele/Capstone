@@ -3,51 +3,62 @@ import React, { useEffect, useState } from "react";
 // ----- Stilizzazione -----
 import { Container, Form, Row, Col, Button, Collapse } from "react-bootstrap";
 import "./CustomersPage.css";
-// ----- Funzioni -----
-import CustomerFormReset from "../../components/customers/CustomerFormReset.jsx";
+//----- Funzioni -----
+import { formatterData } from "../../functions/formatterData.js";
+// ----- Lodash -----
+import _ from "lodash";
 // ----- Comopnenti -----
 import CustomerToast from "../../components/customers/CustumerToast.jsx";
-import {
-  handleNewCustomer,
-  handleEditCustomer,
-  handleSearchCustomer,
-} from "../../components/customers/HandleApiCustomer.jsx";
+import NewCustomer from "../../components/customers/NewCustomer.jsx";
+import CustomerSearch from "../../components/customers/CustomerSearch.jsx";
+import UpdateCustomer from "../../components/customers/UpdateCustomer.jsx";
 
 const CustomersPage = () => {
-
- // ----- INIZIALIZZAZIONE PARAMETRI ----- 
-  // Stato valori degli input del form
-  const [formData, setFormData] = useState({
+  // ----- INIZIALIZZAZIONE PARAMETRI -----
+  // Form vuoto
+  const newForm = {
     firstName: "",
     lastName: "",
     taxCode: "",
     birthDate: "",
-    birthCity: "",
-    birthProvince: "",
-    birthCountry: "Italia",
-    sex: "M",
-    phone1: "",
-    phone2: "",
-    email: "",
-    addressStreet: "",
-    addressStreetNumber: "",
-    addressCity: "",
-    addressProvince: "",
-    addressPostalCode: "",
-    addressCountry: "",
+    placeOfBirth: {
+      city: "",
+      province: "",
+      country: "",
+    },
+    sex: "",
+    contacts: [
+      {
+        phone1: "",
+        phone2: "",
+        email: "",
+        address: [
+          {
+            street: "",
+            streetNumber: "",
+            city: "",
+            province: "",
+            postalCode: "",
+            country: "",
+          },
+        ],
+      },
+    ],
+
     cardCode: "",
     registrationStore: "",
-    registrationDate: new Date().toISOString().split("T")[0],
     preferredStore: "",
-    isActive: "",
-  });
+    registrationDate: formatterData(new Date(), "yyyy-MM-dd"),
+    isActive: null,
+  };
 
-  //Stato per monitoare il submit
-  const [submitOn, setSubmitOn] = useState("");
+  // Stato form aggiornato
+  const [formData, setFormData] = useState(newForm);
 
-  // Stato che gestisce validazione intera form
+  // Stato della validazione di tutto il  form
   const [validatedAll, setValidatedAll] = useState(null);
-  //Stato che gestisce validazione solo dei campi del form necessari per ricerca
+
+  //Stato che della validazione dei campi del form necessari per ricerca
   const [validatedSearch, setValidateSearch] = useState({});
 
   //Stato che contiene array di risultati
@@ -55,7 +66,7 @@ const CustomersPage = () => {
   //Stato che mostra o nasconde select con risultati ricerca
   const [selectView, setSelectView] = useState(false);
   //Stato che contiene customer selezionato dall'option
-  const [selectedCustomer, setSelectedCustomer] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   // Stato classe layout form
   const [layout, setLayout] = useState("");
@@ -71,50 +82,40 @@ const CustomersPage = () => {
     body: "",
   });
 
-  // Array dei parametri da resettare
-  const toResetParams = [
-    setFormData,
-    setLayout,
-    setValidatedAll,
-    setValidateSearch,
-    setSrcResult,
-    setSelectView,
-    setToastMessage,
-  ];
-
-  // All'avvio resetta tutti gli stati del form
-  useEffect(() => {
-    CustomerFormReset(toResetParams);
+  const CustomerFormReset = () => {
+    // Reset degli stati
+    setFormData(newForm);
     setLayout("");
-  }, []);
-
-
-
-
-
-
+    setValidatedAll(null);
+    setValidateSearch({
+      firstName: null,
+      lastName: null,
+      taxCode: null,
+    });
+    setSrcResult([]);
+    setSelectView(false);
+    setToastMessage /
+      {
+        header: "",
+        body: "",
+      };
+  };
 
   // ----- Gestore cambiamento input dal form -----
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]:
-        name === "birthDate" 
-        ? new Date(value).toISOString().split("T")[0] // se data nascita, formatta in yyyy-MM-dd
-        
-        : name === "taxCode" 
-        ? value.toUpperCase()
-        
-        :value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(), // solo prima lettera maiuscola
+
+    // aggiorna formData con lodash (usa name per navigare l'oggetto ed asseganre value)
+    setFormData((prevFormData) => {
+      const newFormData = _.set({ ...prevFormData }, name, value);
+      return newFormData;
     });
-    // stiulizzazione per input modificato
+
+    // Stilizzazione per input modificato
     if (layout === "search") {
       event.target.classList.add("update");
     }
   };
-
-
 
   // ----- Gestore della selezione nel select dei risultati di ricerca -----
   const handleSelectedCustomer = (event) => {
@@ -122,26 +123,36 @@ const CustomersPage = () => {
     const thisCustomer = event.target.value;
 
     // cerca il cliente selezionato fra i risultati
-    srcResult.map((customer) => {
-      if (customer.id === thisCustomer) {
-        setSelectedCustomer(customer);
-      }
-    });
+    let customer = srcResult.find((cust) => cust._id === thisCustomer);
+
+    // prende valore del customer selezionato
+    if (customer) {
+      customer = {
+        ...customer,
+        birthDate: formatterData(customer.birthDate, "yyyy-MM-dd"),
+        registrationDate: formatterData( customer.registrationDate,"yyyy-MM-dd"),
+      };
+      setSelectedCustomer(customer);
+    }
+
+    setLayout("search");
+    
   };
-  // useEffect per gestire asincronia, assegna a formData i deti del cliente selezionato
+  // ogni volta che viene selezioanto un customer aggiorna formData che popola il form
   useEffect(() => {
-    if (Object.keys(selectedCustomer).length) {
-      setFormData(selectedCustomer);
-      //stilizzazione campi riempiti
-      setLayout("search");
+    if (selectedCustomer) {
+      // Crea una copia di selectedCustomer
+      const updatedFormData = _.cloneDeep(selectedCustomer);
+      setFormData(updatedFormData);
     }
   }, [selectedCustomer]);
 
-  // ----- Gestore dei  submit del form
+  // ----- GESTORE DEI SUBMIT DEL FORM -----
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    const submitButton = event.nativeEvent.submitter.name;
+    const submitOn = event.nativeEvent.submitter.name;
+
     //reset dei valori di validità
     setValidatedAll(null);
     setValidateSearch({
@@ -149,56 +160,26 @@ const CustomersPage = () => {
       lastName: null,
       taxCode: null,
     });
+    setSelectedCustomer(null);
 
-
-
-    // ----- NUOVO CLIENTE -----
-    if (submitButton === "new") {
+    // ----- Nuovo cliente -----
+    if (submitOn === "new") {
       //se form non valido, stop e segnala sul form validità negativa
       if (form.checkValidity() === false) {
         event.stopPropagation();
-        setValidatedAll(false);
       }
-      //avvia loader
-      setIsLoading(true);
-      try {
-        // aggiunge nuovo cliente
-        handleNewCustomer(formData);
-        // resetta form
-        CustomerFormReset(toResetParams);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        //ferma loader
-        setIsLoading(false);
-      }
+      setValidatedAll(true)
+      // altrimenti aggiungi cliente
+      NewCustomer(
+        setIsLoading,
+        { ...formData },
+        setToastMessage,
+        CustomerFormReset,
+        setShowCustomerToast
+      );
 
-
-
-    // ----- MODIFICA CLIENTE  
-    } else if (submitButton === "edit") {
-      //se form non valido, stop e segnala sul form validità negativa
-      if (form.checkValidity() === false) {
-        event.stopPropagation();
-        setValidatedAll(false);
-      }
-      //avvia loader
-      setIsLoading(true);
-      try {
-        const response = await handleEditCustomer(formData, selectedCustomer);
-      } catch (error) {
-        
-      }
-      
-   
-
-
-
-    // ----- RICERCA CLIENTE
-    } else if (submitButton === "search") {
-      setSrcResult([]);
-      setSelectView(false);
-
+      // ----- Ricerca cliente -----
+    } else if (submitOn === "search") {
       // Controlla errori:
       //se assente codice fiscale
       if (!formData.taxCode) {
@@ -213,50 +194,36 @@ const CustomersPage = () => {
           return;
         }
       }
+      // ricerca cliente
+      CustomerSearch(
+        setSrcResult,
+        setSelectView,
+        { ...formData },
+        setValidateSearch,
+        setIsLoading,
+        setToastMessage,
+        setShowCustomerToast
+      );
 
-      // Setta i campi come validi o null
-      setValidateSearch({
-        firstName: formData.firstName ? true : null,
-        lastName: formData.lastName ? true : null,
-        taxCode: formData.taxCode ? true : null,
-      });
-
-      // Popola parametri di riceca
-      const srcParams = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        taxCode: formData.taxCode,
-      };
-
-      setIsLoading(true);
-      try {
-        // esegue ricerca
-        const result = await handleSearchCustomer(srcParams);
-        setSrcResult(result);
-        // visulizza select
-        setSelectView(true);
-        // crea toast
-        setToastMessage({
-          header: "Ricerca completata con successo",
-          body: `Trovati ${result.length} risultati per ${
-            srcParams.taxCode
-              ? srcParams.taxCode
-              : `${srcParams.lastName} ${srcParams.firstName}`
-          }`,
-        });
-        //visualizza toast
-        setShowCustomerToast(true);
-      } catch (error) {
-        // crea toast
-        setToastMessage({
-          header: "Errora nella ricerca",
-          body: "Controllare i parametri e riprovare. Se il problema persiste contattare l'assistenza.",
-        });
-        //visualizza toast
-        setShowCustomerToast(true);
-      } finally {
-        setIsLoading(false);
+      // ----- Modifica cliente -----
+    } else if (submitOn === "edit") {
+      //se form non valido, stop e segnala sul form validità negativa
+      if (form.checkValidity() === false) {
+        event.stopPropagation();
+        setValidatedAll(false);
       }
+
+
+      
+      //aggiorna cliente
+      UpdateCustomer(
+        { ...selectedCustomer },
+        { ...formData },
+        setToastMessage,
+        setShowCustomerToast,
+        setIsLoading,
+        CustomerFormReset
+      );
     }
   };
 
@@ -271,12 +238,7 @@ const CustomersPage = () => {
       <Container>
         <h1>Clienti</h1>
 
-        <Form
-          noValidate
-          onSubmit={handleSubmit}
-          className="mt-5"
-          validated={validatedAll}
-        >
+        <Form noValidate validated={validatedAll} onSubmit={handleSubmit} className="mt-5">
           {/* ----- Nome, Cognome, CodFisc, Cerca ----- ----- ----- ----- ----- ----- ----- ----- ----- -----*/}
           <Row className="mb-3">
             <Col xl="3" lg="3">
@@ -319,7 +281,7 @@ const CustomersPage = () => {
               </Form.Group>
             </Col>
 
-            <Col xl="2" lg="3">
+            <Col xl="3" lg="3">
               <Form.Group controlId="customerTaxCodeForm">
                 <Form.Label>Codice Fiscale</Form.Label>
                 <Form.Control
@@ -340,7 +302,7 @@ const CustomersPage = () => {
               </Form.Group>
             </Col>
 
-            <Col xl="1" lg="2" className="d-flex align-items-end">
+            <Col xl="2" lg="2" className="d-flex align-items-end">
               <Button
                 type="submit"
                 name="search"
@@ -357,44 +319,48 @@ const CustomersPage = () => {
                 variant="outline-primary"
                 className="w-100"
                 onClick={() => {
-                  CustomerFormReset(toResetParams);
+                  CustomerFormReset();
                 }}
               >
-                Res
+                Reset
               </Button>
             </Col>
           </Row>
 
           <Row>
             <Col>
-              <Collapse in={selectView}>
-                <Container id="collapse-resultSelect">
-                  <Form.Select
-                    aria-label="Risultati ricerca"
-                    onChange={handleSelectedCustomer}
-                  >
-                    {srcResult.length > 0 ? (
-                      <>
-                        <option key="label-option" value="">
-                          Clienti trovati
+              {selectView ? (
+                <Form.Select
+                  aria-label="Risultati ricerca"
+                  onChange={handleSelectedCustomer}
+                >
+                  <option key="label-option" value="">
+                    Risultati ricerca
+                  </option>
+                  {srcResult.length > 0 ? (
+                    <>
+                      {srcResult.map((customer) => (
+                        <option key={customer._id} value={customer._id}>
+                          {customer.firstName} {customer.lastName} -{" "}
+                          {customer.taxCode.toUpperCase()}
                         </option>
-                        {srcResult.map((customer) => (
-                          <option key={customer.id} value={customer.id}>
-                            {customer.firstName} {customer.lastName} -{" "}
-                            {customer.taxCode}
-                          </option>
-                        ))}
-                      </>
-                    ) : ""}
-                  </Form.Select>
-                </Container>
-              </Collapse>
+                      ))}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </Form.Select>
+              ) : (
+                <Form.Control
+                  type="text"
+                  placeholder={isLoading ? "Ricerca in corso..." : ""}
+                  readOnly
+                ></Form.Control>
+              )}
             </Col>
           </Row>
 
           <hr className="my-4" />
-
-          {isLoading && <p>Caricamento...</p>}
 
           {/* ----- Dati di nascita ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */}
 
@@ -408,10 +374,10 @@ const CustomersPage = () => {
                 <Form.Control
                   className={layout}
                   type="text"
-                  name="birthCity"
+                  name="placeOfBirth.city"
                   placeholder="Comune"
                   required
-                  value={formData.birthCity || ""}
+                  value={formData.placeOfBirth.city || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -426,10 +392,10 @@ const CustomersPage = () => {
                 <Form.Control
                   className={layout}
                   type="text"
-                  name="birthProvince"
+                  name="placeOfBirth.province"
                   placeholder="Provincia"
                   required
-                  value={formData.birthProvince || ""}
+                  value={formData.placeOfBirth.province || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -445,9 +411,9 @@ const CustomersPage = () => {
                   className={layout}
                   type="text"
                   placeholder="nazionalità"
-                  name="birthCountry"
+                  name="placeOfBirth.country"
                   required
-                  value={formData.birthCountry || ""}
+                  value={formData.placeOfBirth.country || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -456,16 +422,17 @@ const CustomersPage = () => {
               </Form.Group>
             </Col>
 
-            <Col xl="1" lg="6">
+            <Col xl="2" lg="6">
               <Form.Group controlId="customerSexForm">
                 <Form.Label>Sesso</Form.Label>
-                <div className="d-flex">
+                <div
+                  className={`d-flex justify-content-around  ${layout} customer-box`}
+                >
                   <Form.Check
                     type="radio"
                     label="M"
                     value="M"
                     name="sex"
-                    className={`form-check-inline ${layout}`}
                     onChange={handleInputChange}
                     checked={formData.sex === "M"}
                   />
@@ -474,7 +441,7 @@ const CustomersPage = () => {
                     label="F"
                     value="F"
                     name="sex"
-                    className={`form-check-inline ${layout}`}
+                    className={`form-check-inline`}
                     onChange={handleInputChange}
                     checked={formData.sex === "F"}
                   />
@@ -514,8 +481,8 @@ const CustomersPage = () => {
                   required
                   type="text"
                   placeholder="Via/Piazza"
-                  name="addressStreet"
-                  value={formData.addressStreet || ""}
+                  name="contacts[0].address[0].street"
+                  value={formData.contacts[0]?.address[0]?.street || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -531,9 +498,9 @@ const CustomersPage = () => {
                   className={layout}
                   required
                   type="text"
-                  placeholder="1"
-                  name="addressStreetNumber"
-                  value={formData.addressStreetNumber || ""}
+                  placeholder=""
+                  name="contacts[0].address[0].streetNumber"
+                  value={formData.contacts[0]?.address[0]?.streetNumber || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -550,8 +517,8 @@ const CustomersPage = () => {
                   required
                   type="text"
                   placeholder="Città"
-                  name="addressCity"
-                  value={formData.addressCity || ""}
+                  name="contacts[0].address[0].city"
+                  value={formData.contacts[0]?.address[0]?.city || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -568,8 +535,8 @@ const CustomersPage = () => {
                   required
                   type="text"
                   placeholder="CAP"
-                  name="addressPostalCode"
-                  value={formData.addressPostalCode || ""}
+                  name="contacts[0].address[0].postalCode"
+                  value={formData.contacts[0]?.address[0]?.postalCode || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -586,8 +553,8 @@ const CustomersPage = () => {
                   required
                   type="text"
                   placeholder="Provincia"
-                  name="addressProvince"
-                  value={formData.addressProvince || ""}
+                  name="contacts[0].address[0].province"
+                  value={formData.contacts[0]?.address[0]?.province || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -604,8 +571,8 @@ const CustomersPage = () => {
                   required
                   type="text"
                   placeholder="Paese"
-                  name="addressCountry"
-                  value={formData.addressCountry || ""}
+                  name="contacts[0].address[0].country"
+                  value={formData.contacts[0]?.address[0]?.country || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -628,8 +595,8 @@ const CustomersPage = () => {
                   required
                   type="text"
                   placeholder="Telefono 1"
-                  name="phone1"
-                  value={formData.phone1 || ""}
+                  name="contacts[0].phone1"
+                  value={formData.contacts[0]?.phone1 || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -645,8 +612,8 @@ const CustomersPage = () => {
                   className={layout}
                   type="text"
                   placeholder="Telefono 2"
-                  name="phone2"
-                  value={formData.phone2 || ""}
+                  name="contacts[0].phone2"
+                  value={formData.contacts[0]?.phone2 || ""}
                   onChange={handleInputChange}
                 />
               </Form.Group>
@@ -659,9 +626,9 @@ const CustomersPage = () => {
                   className={layout}
                   type="email"
                   placeholder="Email"
-                  name="email"
+                  name="contacts[0].email"
                   required
-                  value={formData.email || ""}
+                  value={formData.contacts[0]?.email || ""}
                   onChange={handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -760,7 +727,7 @@ const CustomersPage = () => {
               </Form.Group>
             </Col>
 
-            <Col xl="1" lg="6">
+            <Col xl="4" lg="6">
               <Form.Group controlId="customerFidelityStatusForm">
                 <Form.Label>Carta attiva</Form.Label>
                 <Form.Control
@@ -796,7 +763,7 @@ const CustomersPage = () => {
               </Button>
             </Col>
 
-            <Col xl="1" lg="4" className="d-flex align-items-end">
+            <Col xl="2" lg="4" className="d-flex align-items-end">
               <Button
                 type="submit"
                 name="edit"

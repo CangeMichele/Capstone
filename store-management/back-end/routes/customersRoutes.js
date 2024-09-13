@@ -29,10 +29,10 @@ router.get("/", async (req, res) => {
     const { firstName, lastName, taxCode } = req.query;
     const query = {};
     
-    // Verifica parametri e popola la query
-    if (firstName) query.firstName = firstName;
-    if (lastName) query.lastName = lastName;
-    if (taxCode) query.taxCode = taxCode;
+   // Verifica parametri e popola la query case-insensitive
+   if (firstName) query.firstName = { $regex: new RegExp(firstName, 'i') };
+   if (lastName) query.lastName = { $regex: new RegExp(lastName, 'i') };
+   if (taxCode) query.taxCode = { $regex: new RegExp(taxCode, 'i') };
     
     const customer = await Customer.find(query);
     res.json(customer);
@@ -57,5 +57,26 @@ router.get("/", async (req, res) => {
     }
   })
 
+
+  // ----- DELETE -> Elimina cliente
+  router.delete("/:id", async(req, res)=>{
+    
+    try {
+      const toDeleteCustomer = await Customer.findByIdAndDelete(req.params.id) 
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  })
+
+// ----- GET -> estrapolazione cliente tramite id
+router.get("/:id", async (req, res) => {  
+  try {
+    const customer = await Customer.find(req.params.id);
+    res.json(customer);
+  
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
 
 export default router;

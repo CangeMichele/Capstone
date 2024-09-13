@@ -1,7 +1,14 @@
 .search{
-    background-color: aquamarine;
+    background-color: #e9f0ff;
 }
 
 .update{
-    background-color: rgba(244, 244, 8, 0.702);
+    background-color: #e0f0e0;
+    font-weight:600;
+}
+
+.customer-box{
+    border: 1px solid #ced4da;
+    border-radius: 0.4rem;
+    padding: 0.375rem 0.75rem;
 }

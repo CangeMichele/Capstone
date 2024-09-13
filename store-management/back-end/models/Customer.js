@@ -41,7 +41,8 @@ const CostumerSchema = new mongoose.Schema({
   cardCode: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    unique:true
   },
   registrationStore: {
     type: String,

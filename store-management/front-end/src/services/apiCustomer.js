@@ -39,7 +39,6 @@ export const getSrcCustomers = async (customersParamas) => {
 // PATCH -> modifica cliente
 export const patchCustomer = async (editFields, idCustomer) => {
     console.log("editFields: ", editFields);
-    console.log("idCustomer: ", idCustomer);
     
     try {
         // invio richiesta api
