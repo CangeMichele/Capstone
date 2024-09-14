@@ -1,6 +1,6 @@
 {
   "storeCode": "pdv01",
-  "Name": "Perugia 1",
+  "Name": "Perugia via Roma",
   "status": "Attivo",
   "openingHours": [
     {
@@ -41,9 +41,10 @@
   ],
   "andress": [
     {
-      "street": "Via Roma, 1",
+      "street": "Via Roma",
+      "streetNumber": "1",
       "city": "Perugia",
-      "state": "PG",
+      "province": "PG",
       "postalCode": "06121",
       "country": "Italia"
     }
@@ -52,7 +53,7 @@
     {
       "phone1": 1234567890,
       "phone2": 987654321,
-      "email": "contatti@negoziocentrale.com"
+      "email": "pdv01@negozio.com"
     }
   ],
   "manager": [
@@ -61,7 +62,7 @@
       "lastName": "Bianchi",
       "phone": 1234567890,
       "email": "luca.bianchi@example.com",
-      "userId": "66b2327c5bf6efff56a93dc4"
+      "userId": "71480"
     }
   ],
   "password": "password123"

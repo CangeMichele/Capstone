@@ -5,7 +5,7 @@ import Store from "../models/Store.js";
 
 const router = express.Router();
 
-// ----- Creazione nuovo punto vendita
+// ----- POST -> creazione nuovo punto vendita
 router.post("/", async (req, res) => {
   try {
     const store = new Store(req.body);
@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
 });
 
 
-// ----- Tutti i punti vendita
+// ----- GET -> tutti i punti vendita
 router.get("/", async (req, res) => {
   try {
     const store = await Store.find();
@@ -35,10 +35,10 @@ router.get("/", async (req, res) => {
 });
 
 
-// ----- Punto  specifico
+// ----- GET -> punto vendita specifico
 router.get("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await Store.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: "Utente non trovato" });
     }
@@ -48,5 +48,31 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+ // ----- PATCH -> punto vendita
+ router.patch("/:id", async(req, res) =>{
+  // ricerca per id e carica modifiche
+  try {
+    const updateStore = await Store.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.json(updateStore);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+  // ----- DELETE -> Elimina punto vendita
+  router.delete("/:id", async(req, res)=>{
+    
+    try {
+      const toDeleteStore = await Store.findByIdAndDelete(req.params.id) 
+      return toDeleteStore.data;
+
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  })
+
 
 export default router;

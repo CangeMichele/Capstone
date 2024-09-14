@@ -13,7 +13,7 @@ export const isLogUser = () => {
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      navigate("/userlogin"); // Reindirizza alla pagina di login se non è loggato
+      navigate("/login"); // Reindirizza alla pagina di login se non è loggato
     }
   }, [navigate]);
 

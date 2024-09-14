@@ -1,37 +1,37 @@
 {
-  "storeCode": "pdv01",
-  "Name": "Perugia 1",
-  "status": "Inattivo",
+  "storeCode": "pdv02",
+  "Name": "Terni piazza Mazzini",
+  "status": "Attivo",
   "openingHours": [
     {
       "day": "Lunedì",
-      "open": "09:00",
-      "close": "18:00"
+      "open": "15:00",
+      "close": "19:30"
     },
     {
       "day": "Martedì",
       "open": "09:00",
-      "close": "18:00"
+      "close": "19:30"
     },
     {
       "day": "Mercoledì",
       "open": "09:00",
-      "close": "18:00"
+      "close": "19:30"
     },
     {
       "day": "Giovedì",
       "open": "09:00",
-      "close": "18:00"
+      "close": "19:30"
     },
     {
       "day": "Venerdì",
       "open": "09:00",
-      "close": "18:00"
+      "close": "19:30"
     },
     {
       "day": "Sabato",
-      "open": "10:00",
-      "close": "14:00"
+      "open": "09:00",
+      "close": "19:30"
     },
     {
       "day": "Domenica",
@@ -41,10 +41,11 @@
   ],
   "andress": [
     {
-      "street": "Via Roma, 1",
-      "city": "Perugia",
-      "state": "PG",
-      "postalCode": "06121",
+      "street": "Piazza Mazzini",
+      "streetNumber": "3",
+      "city": "Terni",
+      "province": "Terni",
+      "postalCode": "05100",
       "country": "Italia"
     }
   ],
@@ -52,16 +53,16 @@
     {
       "phone1": 1234567890,
       "phone2": 987654321,
-      "email": "contatti@negoziocentrale.com"
+      "email": "pdv02@negozio.com"
     }
   ],
   "manager": [
     {
-      "firstName": "Luca",
-      "lastName": "Bianchi",
-      "phone": 1234567890,
-      "email": "luca.bianchi@example.com",
-      "userId": "66b2327c5bf6efff56a93dc4"
+      "firstName": "Elena",
+      "lastName": "Neri",
+      "phone": 3389876543,
+      "email": "elena.neri@example.com",
+      "userId": "68554"
     }
   ],
   "password": "password123"

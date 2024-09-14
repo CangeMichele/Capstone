@@ -1,0 +1,36 @@
+.fixed-width-name {
+    width: 200px;
+  }
+  
+  .fixed-width-brand {
+    width: 120px;
+  }
+  
+  .fixed-width-product-id {
+    width: 100px;
+  }
+  
+  .fixed-width-category {
+    width: 80px;
+  }
+  
+  .fixed-width-ean {
+    width: 120px;
+  }
+  
+  .fixed-width-price {
+    width: 80px;
+  }
+  
+  .fixed-width-quantity {
+    width: 100px;
+  }
+  
+  .fixed-width-in-stock {
+    width: 80px;
+  }
+  
+  .fixed-width-stock-quantity {
+    width: 120px;
+  }
+  

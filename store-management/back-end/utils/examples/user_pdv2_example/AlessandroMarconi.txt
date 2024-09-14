@@ -1,0 +1,27 @@
+{
+  "firstName": "Alessandro",
+  "lastName": "Marconi",
+  "birthDate": "1987-11-23",
+  "hiredDate": "2020-03-15",
+  "endDate": null,
+  "isActive": true,
+  "storeCode": "pdv02",
+  "position": 2,
+  "contacts": [
+    {
+      "phone1": 3345678901,
+      "phone2": 3387654321,
+      "email": "alessandra.neri@example.com",
+      "address": [
+        {
+          "street": "Via della Libertà",
+          "city": "Roma",
+          "state": "RM",
+          "postalCode": "00199",
+          "country": "Italia"
+        }
+      ]
+    }
+  ],
+  "password": "password123"
+}

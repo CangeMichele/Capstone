@@ -36,10 +36,10 @@ router.post("/user", async (req, res) => {
 // ----- Recuper dati del utente
 router.get("/user", authUserMiddleware, (req, res) => {
 
-  const authorData = req.user.toObject();
-  delete authorData.password;  // Rimuove il campo password per sicurezza
+  const userData = req.user.toObject();
+  delete userData.password;  // Rimuove il campo password per sicurezza
 
-  res.json(authorData);
+  res.json(userData);
 });
 
 

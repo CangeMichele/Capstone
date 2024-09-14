@@ -1,7 +1,11 @@
 // ---- React ----
 import React, { useEffect, useState } from "react";
+// ----- React-router-dom ----- 
+import { useNavigate } from "react-router-dom";
 // ----- Stilizzazione -----
-import { Container, Form, Row, Col, Button, Collapse } from "react-bootstrap";
+import { Container, Form, Row, Col, Button } from "react-bootstrap";
+import { FaArrowLeft } from "react-icons/fa";
+
 import "./CustomersPage.css";
 //----- Funzioni -----
 import { formatterData } from "../../functions/formatterData.js";
@@ -82,6 +86,7 @@ const CustomersPage = () => {
     body: "",
   });
 
+
   const CustomerFormReset = () => {
     // Reset degli stati
     setFormData(newForm);
@@ -130,13 +135,15 @@ const CustomersPage = () => {
       customer = {
         ...customer,
         birthDate: formatterData(customer.birthDate, "yyyy-MM-dd"),
-        registrationDate: formatterData( customer.registrationDate,"yyyy-MM-dd"),
+        registrationDate: formatterData(
+          customer.registrationDate,
+          "yyyy-MM-dd"
+        ),
       };
       setSelectedCustomer(customer);
     }
 
     setLayout("search");
-    
   };
   // ogni volta che viene selezioanto un customer aggiorna formData che popola il form
   useEffect(() => {
@@ -168,7 +175,7 @@ const CustomersPage = () => {
       if (form.checkValidity() === false) {
         event.stopPropagation();
       }
-      setValidatedAll(true)
+      setValidatedAll(true);
       // altrimenti aggiungi cliente
       NewCustomer(
         setIsLoading,
@@ -213,8 +220,6 @@ const CustomersPage = () => {
         setValidatedAll(false);
       }
 
-
-      
       //aggiorna cliente
       UpdateCustomer(
         { ...selectedCustomer },
@@ -234,11 +239,29 @@ const CustomersPage = () => {
         setShowCustomerToast={setShowCustomerToast}
         toastMessage={toastMessage}
       />
-
       <Container>
-        <h1>Clienti</h1>
+       
+        <Row className="align-items-center mb-3">
+          <Col xs="auto">
+            <Button
+              variant="secondary"
+              onClick={() => navigate(-1)}
+              className="mb-3"
+            >
+              <FaArrowLeft /> Indietro
+            </Button>
+          </Col>
+          <Col>
+            <h1 className="text-center">Clienti</h1>
+          </Col>
+        </Row>
 
-        <Form noValidate validated={validatedAll} onSubmit={handleSubmit} className="mt-5">
+        <Form
+          noValidate
+          validated={validatedAll}
+          onSubmit={handleSubmit}
+          className="mt-5"
+        >
           {/* ----- Nome, Cognome, CodFisc, Cerca ----- ----- ----- ----- ----- ----- ----- ----- ----- -----*/}
           <Row className="mb-3">
             <Col xl="3" lg="3">

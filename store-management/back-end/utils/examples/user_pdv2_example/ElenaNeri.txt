@@ -1,0 +1,27 @@
+{
+  "firstName": "Elena",
+  "lastName": "Neri",
+  "hiredDate": "2019-03-15",
+  "endDate": null,
+  "isActive": true,
+  "storeCode": "pdv02",
+  "birthDate": "1985-10-22",
+  "position": 1,
+  "contacts": [
+    {
+      "phone1": 3389876543,
+      "phone2": 3381234567,
+      "email": "elena.neri@example.com",
+      "address": [
+        {
+          "street": "Via Garibaldi",
+          "city": "Torino",
+          "state": "TO",
+          "postalCode": "10128",
+          "country": "Italia"
+        }
+      ]
+    }
+  ],
+  "password": "elena123"
+}

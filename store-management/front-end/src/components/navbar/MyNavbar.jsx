@@ -13,22 +13,45 @@ function MyNavbar() {
   // ----- gestore Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false);
     navigate("/");
   };
 
+  const store = JSON.parse(localStorage.getItem("store"));
+  const user = JSON.parse(localStorage.getItem("user"));
+
+
   return (
-    <Navbar expand="lg" bg="light" variant="light">
+    <Navbar expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand>Capstone</Navbar.Brand>
+        {/* Sinistra: Logo PetStore */}
+        <Navbar.Brand className="me-auto">
+          <b>PetStore</b>
+        </Navbar.Brand>
+
+        {/* Centro: Nome e Codice Negozio */}
+        <Container className="d-flex justify-content-center">
+          <Navbar.Text>
+            {store.Name} - {store.storeCode}
+          </Navbar.Text>
+        </Container>
+
+        {/* Destra: Links di navigazione */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            {/* mostra funzionalità se loggato */}
+          <Nav className="ms-auto">
             {isLoggedIn && (
               <>
                 <LinkContainer to="/">
                   <Nav.Link>Home</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/casher">
+                  <Nav.Link>Cassa</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/products">
+                  <Nav.Link>Articoli</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/customers">
+                  <Nav.Link>Clienti</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/userlogin">
                   <Nav.Link onClick={handleLogout}>Logout</Nav.Link>

@@ -1,6 +1,6 @@
-// ----- react
+// ----- React -----
 import React, { useEffect, useState } from "react";
-// ----- stilizzazione
+// ----- Stilizzazione -----
 import {
   Form,
   InputGroup,
@@ -12,13 +12,17 @@ import {
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ProductsSearchBar.css";
+// ----- Funzioni -----
+import { productsSearchHandler } from "./ProductsSearchHandler.js";
 
 function ProductsSearchBar({
   thisBrand,
+  srcParams,
   setSrcParams,
-  handleSubmitState,
-  isSubmit,
-  setIsSubmit,
+  handlerSearchResult,
+  handlePagination,
+  pagination,
+  handleLoader,
 }) {
   // Stato del testo di input
   const [search, setSearch] = useState("");
@@ -28,7 +32,8 @@ function ProductsSearchBar({
 
   // Stato per radio selezionato
   const [selectedRadio, setSelectedRadio] = useState("");
-  //Stato per check selezionati
+
+  // Stato per check selezionati
   const [selectedCheck, setSelectedCheck] = useState({
     name: false,
     description: false,
@@ -38,12 +43,12 @@ function ProductsSearchBar({
   const [errorCode, setErrorCode] = useState("");
   // Oggetto descrizione errori
   const errorList = {
-    "01" : "Campo di ricerca vuoto",
-    "02" : "Filtri di ricerca non selezionati",
-    "03" : "Valore non numerico",
-    "04" : "Lunghezza errata", // per ean
-    "05" : "Lunghezza errata" //per product_id
-  }
+    "01": "Campo di ricerca vuoto",
+    "02": "Filtri di ricerca non selezionati",
+    "03": "Valore non numerico",
+    "04": "Lunghezza ean errata", // per ean
+    "05": "Lunghezza codice errata", //per product_id
+  };
 
   // Stato per gestire validazioneo module
   const [validated, setValidated] = useState(false);
@@ -60,7 +65,6 @@ function ProductsSearchBar({
     // Reset errorCode
     setErrorCode("");
     setValidated(false);
-    
 
     // Aggiorna srcParams con dati form e verifica validità
     switch (selectedRadio) {
@@ -148,25 +152,29 @@ function ProductsSearchBar({
   const handleButtonCheckChange = (key) => {
     setSelectedCheck((prevState) => ({
       ...prevState,
-      // ON/OFF se esiste assegna valore false, se non esiste da valore di search (se non è vuoto/false) oppure true
       [key]: !prevState[key],
     }));
   };
 
   // Gestisce il submit del form che fa partire la ricerca
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
-
-    const form = e.currentTarget;
-    // Controlla la validità del modulo
 
     // Controlla se ci sono errori nei parametri
     if (errorCode) {
       console.error(errorList[errorCode]);
     } else {
-      setIsSubmit(true);
       setValidated(true); // Imposta lo stato di validazione come true
-      console.log("Inviato", search);
+
+      // Chiamata alla funzione di ricerca
+      await productsSearchHandler({
+        thisBrand,
+        srcParams,
+        pagination,
+        handleLoader,
+        handlerSearchResult,
+        handlePagination,
+      });
     }
   };
 

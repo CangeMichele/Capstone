@@ -21,11 +21,15 @@ const AddressSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  streetNumber: {
+    type: String,
+    required: true
+  },
   city: {
     type: String,
     required: true
   },
-  state: {
+  province: {
     type: String,
     required: true
   },

@@ -63,6 +63,7 @@ router.get("/", async (req, res) => {
     
     try {
       const toDeleteCustomer = await Customer.findByIdAndDelete(req.params.id) 
+      return toDeleteCustomer.data;
     } catch (err) {
       res.status(400).json({ message: err.message });
     }

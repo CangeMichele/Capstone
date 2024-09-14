@@ -1,0 +1,27 @@
+{
+  "firstName": "Giorgia",
+  "lastName": "Esposito",
+  "birthDate": "1995-05-14",
+  "hiredDate": "2022-01-20",
+  "endDate": null,
+  "isActive": true,
+  "storeCode": "pdv02",
+  "position": 3,
+  "contacts": [
+    {
+      "phone1": 3456789012,
+      "phone2": 3478901234,
+      "email": "giorgia.esposito@example.com",
+      "address": [
+        {
+          "street": "Via Roma",
+          "city": "Napoli",
+          "state": "Campania",
+          "postalCode": "80100",
+          "country": "Italia"
+        }
+      ]
+    }
+  ],
+  "password": "password123"
+}

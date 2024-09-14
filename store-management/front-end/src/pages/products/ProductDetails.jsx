@@ -1,70 +1,84 @@
-// ----- React -----
+// ----- React ----- 
 import React from "react";
-//----- React-router-dom
+// ----- React-router-dom ----- 
 import { useLocation, useNavigate } from "react-router-dom";
-// ----- stilizzazione -----
+// ----- Stilizzazione ----- 
 import { Row, Col, Card, Button } from "react-bootstrap";
+// ----- Icone ----- 
+import { FaArrowLeft, FaUser } from "react-icons/fa";
 
 function ProductDetails() {
-  
   const location = useLocation();
   const navigate = useNavigate(); 
 
-  const { product } = location.state || {}; // Recupera l'oggetto product
-  const { thisBrand } = location.state || {}; // Recupera l'oggetto product
-  console.log(thisBrand);
-  
-  
+  // Recupera l'oggetto `product` e `thisBrand` dallo stato di `location`
+  const { product } = location.state || {};
+  const { thisBrand } = location.state || {}; 
+
+  // Funzione per tornare alla pagina precedente
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  // Funzione per navigare alla pagina del brand
+  const handleGoToBrand = () => {
+    navigate('/brands/details');
+  };
 
   return (
-    <div>
+    <div className="product-details-container">
+      <Button 
+        variant="secondary" 
+        onClick={handleGoBack} 
+        className="mb-3">
+        <FaArrowLeft /> Indietro
+      </Button>
+      
       {product ? (
-        <Card className="mb-3" style={{ maxWidth: "600px" }}>
-          
-          <Card.Header as="h5" className="text-center">
-            <Button  variant="secondary" onClick={() => navigate(-1)} className="mr-2">indietro</Button>
+        <Card className="product-card mb-4" style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <Card.Header as="h5" className="text-center bg-primary text-white">
             {product.name}
           </Card.Header>
-         
+
           <Card.Body>
             <Row>
-              <Col xs={4}>
+              <Col md={4} className="d-flex justify-content-center">
                 <Card.Img
-                  // src={product.imageUrl} TO DO : URL CLOUDINARY
                   src="https://image.freepik.com/free-vector/pets-shop-logo-with-dog-cat-parrot-illustration_162786-75.jpg"
                   alt={product.name}
-                  className="img-fluid rounded-start"
+                  className="img-fluid rounded"
                 />
               </Col>
-              <Col xs={8}>
-                <Row>
+
+              <Col md={8}>
+                <Row className="mb-3">
                   <Col>
                     <Card.Text>
-                      <b>Descrizione:</b> {product.description}
+                      <strong>Descrizione:</strong> {product.description}
                     </Card.Text>
                   </Col>
                 </Row>
-                <Row>
-                  <Col>
+                <Row className="mb-3">
+                  <Col md={6}>
                     <Card.Text>
-                      <b>ean:</b> {product.ean}
+                      <strong>EAN:</strong> {product.ean}
                     </Card.Text>
                   </Col>
-                  <Col>
+                  <Col md={6}>
                     <Card.Text>
-                      <b>codice:</b> {product.product_id}
+                      <strong>Codice:</strong> {product.product_id}
                     </Card.Text>
                   </Col>
                 </Row>
-                <Row>
-                  <Col>
+                <Row className="mb-3">
+                  <Col md={6}>
                     <Card.Text>
-                      <b>Prezzo:</b> € {product.price}
+                      <strong>Prezzo:</strong> € {product.price}
                     </Card.Text>
                   </Col>
-                  <Col>
+                  <Col md={6}>
                     <Card.Text>
-                      <b>In Stock:</b> {product.inStock ? "Sì" : "No"}
+                      <strong>In Stock:</strong> {product.inStock ? "Sì" : "No"}
                     </Card.Text>
                   </Col>
                 </Row>
@@ -72,35 +86,41 @@ function ProductDetails() {
             </Row>
           </Card.Body>
 
-          <Card.Body>
-            <Card.Text>
-              <b>Brand:</b> {product.brand}
-            </Card.Text>
-            <Card.Text>
-              <b>Categoria:</b> {product.category}
-            </Card.Text>
-            <Card.Text>
-              <b>Quantità:</b> {product.quantity}
-            </Card.Text>
-            <Card.Text>
-              <b>Giacenza:</b> {product.stockQuantity} 
-            </Card.Text>
+          <Card.Body className="bg-light">
+            <Row>
+              <Col md={6}>
+                <Card.Text>
+                  <strong>Brand:</strong> {product.brand}
+                </Card.Text>
+                <Card.Text>
+                  <strong>Categoria:</strong> {product.category}
+                </Card.Text>
+              </Col>
+              <Col md={6}>
+                <Card.Text>
+                  <strong>Quantità:</strong> {product.quantity}
+                </Card.Text>
+                <Card.Text>
+                  <strong>Giacenza:</strong> {product.stockQuantity}
+                </Card.Text>
+              </Col>
+            </Row>
           </Card.Body>
 
-          <Card.Footer>
+          <Card.Footer className="text-center">
             <Card.Text>
-              <b>Ordini:</b> {thisBrand.supplier.orderDays.join(', ')} 
+              <strong>Ordini:</strong> {thisBrand.supplier.orderDays.join(', ')}
+            </Card.Text>
             <Card.Text>
+              <strong>Arrivi:</strong> {thisBrand.supplier.deliveryDays.join(', ')}
             </Card.Text>
-              <b>Arrivi:</b> {thisBrand.supplier.deliveryDays.join(', ')} 
-            </Card.Text>
-            <Button>Fornitore</Button>
+            <Button variant="primary" onClick={handleGoToBrand}>
+              <FaUser /> Fornitore
+            </Button>
           </Card.Footer>
-          
-
         </Card>
       ) : (
-        <p>No product details available.</p>
+        <p className="text-center">Nessun dettaglio del prodotto disponibile.</p>
       )}
     </div>
   );

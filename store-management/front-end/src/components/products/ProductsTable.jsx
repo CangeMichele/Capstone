@@ -1,9 +1,12 @@
 // ----- React -----
-import React from "react";
+import React, { useEffect } from "react";
 //----- React-router-dom
 import { useNavigate } from "react-router-dom";
 // ----- stilizzazione -----
 import { Table, Row, Col, Button, Form } from "react-bootstrap";
+import { FaArrowLeft , FaArrowRight  } from "react-icons/fa";
+
+
 
 function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
   // Destrutturo paginazione per gestire singolarmente gli stati
@@ -12,6 +15,10 @@ function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
   // Gestore navigazione
   const navigate = useNavigate();  
   
+  useEffect(()=>{
+    console.log("srcResult: ", srcResult);
+    
+  }, [srcResult])
 
   return (
     <>
@@ -20,15 +27,15 @@ function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
         <Table striped bordered hover size="sm">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Product ID</th>
-            <th>Category</th>
-            <th>EAN</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>inStock</th>
-            <th>Stock Quantity</th>
+          <th className="fixed-width-name">Name</th>
+          <th className="fixed-width-brand">Brand</th>
+          <th className="fixed-width-product-id">Product ID</th>
+          <th className="fixed-width-category">Category</th>
+          <th className="fixed-width-ean">EAN</th>
+          <th className="fixed-width-price">Price</th>
+          <th className="fixed-width-quantity">Quantity</th>
+          <th className="fixed-width-in-stock">inStock</th>
+          <th className="fixed-width-stock-quantity">Stock Quantity</th>
           </tr>
         </thead>
         <tbody>
@@ -61,40 +68,45 @@ function ProductsTable({ srcResult, pagination, handlePagination, thisBrand }) {
           <h3>Nessun dato trovato</h3>
         )}
 
-      {/* --- barra di navigazione pagine --- */}
-      <Row className="justify-content-center align-items-center my-3">
-        <Col className="text-center">
-          <Form>
-            <Button
-              onClick={() => handlePagination({ currentPage: Math.max(currentPage - 1, 1) })}
-              disabled={currentPage === 1}
-              className="mx-2"
-            >
-              Back
-            </Button>
-            <h5 className="d-inline mx-2">
-              {currentPage} / {totalPages}
-            </h5>
-            <Button
-              onClick={() => handlePagination({ currentPage: Math.min(currentPage + 1, totalPages) })}
-              disabled={currentPage === totalPages}
-              className="mx-2"
-            >
-              Next
-            </Button>
-            <Form.Select
-              value={limit}
-              onChange={(e) => handlePagination({ limit: Number(e.target.value), currentPage: 1 })}
-              className="mx-2"
-              style={{ width: "auto" }}
-            >
-              <option value={10}>10</option>
-              <option value={15}>15</option>
-              <option value={20}>20</option>
-            </Form.Select>
-          </Form>
-        </Col>
-      </Row>
+      {/* --- Barra di navigazione pagine --- */}
+<Row className="justify-content-center align-items-center my-4">
+  <Col className="text-center">
+    <Form className="d-flex justify-content-center align-items-center">
+      <Button
+        onClick={() => handlePagination({ currentPage: Math.max(currentPage - 1, 1) })}
+        disabled={currentPage === 1}
+        className="mx-2"
+        variant="outline-secondary"
+        style={{ borderRadius: '10px',  }}
+      >
+        <FaArrowLeft />
+      </Button>
+      <h5 className="d-inline mx-2">
+        {currentPage} / {totalPages}
+      </h5>
+      <Button
+        onClick={() => handlePagination({ currentPage: Math.min(currentPage + 1, totalPages) })}
+        disabled={currentPage === totalPages}
+        className="mx-2"
+        variant="outline-secondary"
+        style={{ borderRadius: '10px',  }}
+      >
+        <FaArrowRight />
+      </Button>
+      <Form.Select
+        value={limit}
+        onChange={(e) => handlePagination({ limit: Number(e.target.value), currentPage: 1 })}
+        className="mx-2"
+        style={{ width: 'auto', borderRadius: '20px' }}
+      >
+        <option value={10}>10</option>
+        <option value={15}>15</option>
+        <option value={20}>20</option>
+      </Form.Select>
+    </Form>
+  </Col>
+</Row>
+
     </>
   );
 }
