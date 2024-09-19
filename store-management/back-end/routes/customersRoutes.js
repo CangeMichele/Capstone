@@ -26,15 +26,17 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {  
   try {
     // Estrapola dati dalla richiesta
-    const { firstName, lastName, taxCode } = req.query;
-    const query = {};
+    const { firstName, lastName, taxCode, cardCode  } = req.query;
+    const myQuery = {};
     
    // Verifica parametri e popola la query case-insensitive
-   if (firstName) query.firstName = { $regex: new RegExp(firstName, 'i') };
-   if (lastName) query.lastName = { $regex: new RegExp(lastName, 'i') };
-   if (taxCode) query.taxCode = { $regex: new RegExp(taxCode, 'i') };
+   if (firstName) myQuery.firstName = { $regex: new RegExp(firstName, 'i') };
+   if (lastName) myQuery.lastName = { $regex: new RegExp(lastName, 'i') };
+   if (taxCode) myQuery.taxCode = { $regex: new RegExp(taxCode, 'i') };
+   if (cardCode) myQuery.cardCode = cardCode;
+
     
-    const customer = await Customer.find(query);
+    const customer = await Customer.find(myQuery);
     res.json(customer);
   
     } catch (err) {

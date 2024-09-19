@@ -1,8 +1,12 @@
 // ----- React -----
 import React, { useState, useEffect } from "react";
+// ----- React-router-dom -----
+import { useNavigate } from "react-router-dom";
 // ----- Stilizzazione -----
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "./ProductPage.css";
+// ----- Icone -----
+import { FaArrowLeft } from "react-icons/fa";
 // ----- API -----
 import { getBrands } from "../../services/apiBrand.js";
 import { getProductsBrand } from "../../services/apiProducts.js";
@@ -14,12 +18,15 @@ import ProductsTable from "../../components/products/ProductsTable.jsx";
 import { productsSearchHandler } from "../../components/products/ProductsSearchHandler.js";
 
 const ProductsPage = () => {
+  // Navigazione
+  const navigate = useNavigate();
+
   // Stato contenente tutti i documenti "brand" del db
   const [brands, setBrands] = useState([]);
 
   // Stato contenente "brand" selezionato
   const [thisBrand, setThisBrand] = useState(null);
-  
+
   // Stato loader
   const [loader, setLoader] = useState(false);
 
@@ -48,7 +55,7 @@ const ProductsPage = () => {
 
   // Callback che gestisce risultato ricerca
   const handlerSearchResult = (newResult) => {
-    console.log('Nuovo risultato della ricerca:', newResult);
+    console.log("Nuovo risultato della ricerca:", newResult);
     setSrcResult(newResult);
   };
 
@@ -81,19 +88,21 @@ const ProductsPage = () => {
     };
 
     fetchBrands();
-
   }, []);
 
   useEffect(() => {
     if (thisBrand) {
-
       //rendo disponibile this brand a tutte le pagine tramite localStorage
       localStorage.setItem("thisBrand", JSON.stringify(thisBrand));
 
       const fetchProductsForBrand = async () => {
         handleLoader(true);
         try {
-          const prodResult = await getProductsBrand(thisBrand.name, srcParams, pagination);
+          const prodResult = await getProductsBrand(
+            thisBrand.name,
+            srcParams,
+            pagination
+          );
           setSrcResult(prodResult.products);
           handlePagination({ totalPages: prodResult.totalPages });
         } catch (error) {
@@ -115,17 +124,25 @@ const ProductsPage = () => {
       pagination,
       handleLoader,
       handlerSearchResult,
-      handlePagination
+      handlePagination,
     });
   };
 
   return (
     <Container>
       <Row className="d-flex justify-content-center align-items-center">
-        <Col xs="auto">
-          <h1 className="me-2">Articoli</h1>
+        <Col xl="2">
+          <Button
+            variant="secondary"
+            onClick={() => navigate(-1)}
+            className="mb-3"
+          >
+            <FaArrowLeft /> Indietro
+          </Button>
         </Col>
-        <Col xs="auto">
+        <Col className="d-flex justify-content-center align-items-center">
+          <h1 className="me-2">Articoli</h1>
+
           <h3>- ricerca e visualizza</h3>
         </Col>
       </Row>
@@ -138,8 +155,8 @@ const ProductsPage = () => {
           setSrcParams={setSrcParams}
           handlerSearchResult={handlerSearchResult}
           handleLoader={handleLoader}
-          pagination = {pagination}
-          handlePagination={ handlePagination}
+          pagination={pagination}
+          handlePagination={handlePagination}
           handleSearch={handleSearch} // Aggiungi la prop per gestire la ricerca
         />
 

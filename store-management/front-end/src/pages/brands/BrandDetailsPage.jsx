@@ -8,6 +8,7 @@ import { Card, Button, ListGroup } from "react-bootstrap";
 import { FaPhone, FaEnvelope, FaGlobe, FaArrowLeft } from "react-icons/fa";
 
 function BrandDetailsPage() {
+  // Navigazione
   const navigate = useNavigate();
   
   // Stato per memorizzare i dati del fornitore

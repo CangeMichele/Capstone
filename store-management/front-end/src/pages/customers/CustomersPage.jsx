@@ -86,6 +86,9 @@ const CustomersPage = () => {
     body: "",
   });
 
+  // Navigazione
+  const navigate = useNavigate();
+
 
   const CustomerFormReset = () => {
     // Reset degli stati
@@ -145,7 +148,7 @@ const CustomersPage = () => {
 
     setLayout("search");
   };
-  // ogni volta che viene selezioanto un customer aggiorna formData che popola il form
+  // ogni volta che viene seleziaanto un customer aggiorna formData che popola il form
   useEffect(() => {
     if (selectedCustomer) {
       // Crea una copia di selectedCustomer

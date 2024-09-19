@@ -53,6 +53,19 @@ router.delete("/prod_id/:id", async (req, res) => {
   }
 });
 
+// ----- PATCH -> Modifica articolo
+router.patch("/prod_id/:id", async(req,res)=>{
+  try {
+    const updatePrduct = await Product.findOneAndUpdate({product_id: req.params.id}, req.body,{
+      new: true,
+    });
+    res.json(updatePrduct);
+  } catch (error) {
+    res.status(400).json({message: error.message})
+    
+  }
+})
+
 // -----***** API form ricerca *****-----
 
 // -----GET -> Ricerca su Brand con impaginazione e filtri
@@ -193,7 +206,6 @@ router.get("/prod_id/:id", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Articolo non trovato" })
     }
-    console.log(product);
 
     res.json({ products: [product] });
   } catch (error) {
