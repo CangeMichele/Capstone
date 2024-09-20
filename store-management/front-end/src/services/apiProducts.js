@@ -42,7 +42,7 @@ export const getProductsGlobal = async (srcParams, pagination) => {
     //parametri query
     const queryParams = {
       page: pagination.currentPage,
-      limit: pagination.limit,
+      limit: 100,
       srcText: srcParams.filter_value.srcText,
       in_name: srcParams.filter_value.in_name,
       in_description: srcParams.filter_value.in_description,
@@ -52,7 +52,8 @@ export const getProductsGlobal = async (srcParams, pagination) => {
     const response = await api.get(`/products`, {
       params: queryParams,
     });
-
+    console.log("DEBUG RESPONSE DATA GLOBAL", response);
+    
     return response.data;
 
   } catch (error) {

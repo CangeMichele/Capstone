@@ -33,6 +33,9 @@ const ProductsPage = () => {
   // Stato parametri di ricerca
   const [srcParams, setSrcParams] = useState({});
 
+  // Stato contenente prodotti per brand
+  const [prodsBrand, setProdsBrand] = useState();
+
   // Stato contenente risultato ricerca
   const [srcResult, setSrcResult] = useState();
 
@@ -67,6 +70,11 @@ const ProductsPage = () => {
     }));
   };
 
+  useEffect(()=>{
+    console.log("DEBUG srcResult: NELLA PAGINA PRINCIPALE ", srcResult);
+    
+  }, [srcResult]);
+
   // Effetto per aggiornare srcResult quando thisBrand cambia
   useEffect(() => {
     handlerSearchResult(thisBrand);
@@ -78,8 +86,12 @@ const ProductsPage = () => {
       setLoader(true);
       try {
         const brandsData = await getBrands();
-        setBrands(brandsData);
-        handleThisBrand(brandsData[0]);
+        // Ordina i brand in ordine alfabetico
+        const sortedBrands = [...brandsData].sort((a, b) => a.name.localeCompare(b.name));
+        
+        setBrands(sortedBrands);
+        handleThisBrand(sortedBrands[0]);
+
       } catch (error) {
         console.error(`Errore nel recupero dei brand:`, error);
       } finally {
@@ -101,9 +113,11 @@ const ProductsPage = () => {
           const prodResult = await getProductsBrand(
             thisBrand.name,
             srcParams,
-            pagination
+            pagination,
           );
-          setSrcResult(prodResult.products);
+          
+          console.log("DEBUG: sei qui");
+          setProdsBrand(prodResult.products);
           handlePagination({ totalPages: prodResult.totalPages });
         } catch (error) {
           console.error("Errore nella richiesta dei prodotti:", error);
@@ -126,6 +140,9 @@ const ProductsPage = () => {
       handlerSearchResult,
       handlePagination,
     });
+
+
+   
   };
 
   return (
@@ -157,7 +174,8 @@ const ProductsPage = () => {
           handleLoader={handleLoader}
           pagination={pagination}
           handlePagination={handlePagination}
-          handleSearch={handleSearch} // Aggiungi la prop per gestire la ricerca
+          handleSearch={handleSearch} 
+          handleThisBrand ={handleThisBrand}
         />
 
         {/* NAVIGAZIONE BRAND - seleziona brand di riferimento */}
@@ -165,6 +183,8 @@ const ProductsPage = () => {
           brands={brands}
           thisBrand={thisBrand}
           handleThisBrand={handleThisBrand}
+          srcResult = {srcResult}
+          srcParams = {srcParams}
         />
 
         {/* TABELLA - visualizzazione prodotti */}
@@ -172,6 +192,7 @@ const ProductsPage = () => {
         {thisBrand && (
           <ProductsTable
             srcResult={srcResult}
+            prodsBrand={prodsBrand}
             pagination={pagination}
             handlePagination={handlePagination}
             thisBrand={thisBrand}

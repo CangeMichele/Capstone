@@ -23,6 +23,7 @@ function ProductsSearchBar({
   handlePagination,
   pagination,
   handleLoader,
+  handleThisBrand
 }) {
   // Stato del testo di input
   const [search, setSearch] = useState("");
@@ -61,12 +62,14 @@ function ProductsSearchBar({
     }
   }, [thisBrand]);
 
+  // Ad ogni cambio di parametri ggiorna srcParams con dati form e verifica validità
   useEffect(() => {
-    // Reset errorCode
+    // reset errorCode
     setErrorCode("");
+    // reset validazione form
     setValidated(false);
 
-    // Aggiorna srcParams con dati form e verifica validità
+    // controllo parametri di ricerca
     switch (selectedRadio) {
       case "brand":
         if (!selectedCheck.name && !selectedCheck.description) {
@@ -127,6 +130,12 @@ function ProductsSearchBar({
     }
   }, [search, selectedRadio, selectedCheck]);
 
+
+useEffect(()=>{
+  console.log("DEBUG SRCPARAMS", srcParams);
+  
+},[srcParams])
+
   // Gestisce il cambiamento del valore radio button
   const handleButtonRadioChange = (key) => {
     setSelectedRadio(key);
@@ -160,11 +169,10 @@ function ProductsSearchBar({
   const handleSubmitForm = async (e) => {
     e.preventDefault();
 
-    // Controlla se ci sono errori nei parametri
-    if (errorCode) {
-      console.error(errorList[errorCode]);
-    } else {
-      setValidated(true); // Imposta lo stato di validazione come true
+    // Procede se non ci sono errori
+    if (!errorCode) {
+      
+      setValidated(true); // valida form
 
       // Chiamata alla funzione di ricerca
       await productsSearchHandler({
@@ -174,6 +182,7 @@ function ProductsSearchBar({
         handleLoader,
         handlerSearchResult,
         handlePagination,
+        handleThisBrand
       });
     }
   };

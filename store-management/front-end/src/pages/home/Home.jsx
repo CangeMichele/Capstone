@@ -1,10 +1,12 @@
 // ----- React -----
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 // ----- stilizzazione -----
 import { Row, Col, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaCashRegister, FaBox, FaUser, FaStore  } from "react-icons/fa";
+import "./Home.css"
 // ----- funzioni & api per login -----
 import { isLogUser } from "../../functions/isLogUser";
 
@@ -33,12 +35,14 @@ const Home = () => {
       <Row>
         <Col xl="8">
           <Form className="p-4 text-center">
+            
             <Row className="mb-3">
-              <Col className="d-flex justify-content-end">
+              
+              <Col className="d-flex justify-content-end ">
                 <Button
                   variant="primary"
                   size="lg"
-                  className="d-flex flex-column align-items-center justify-content-center w-50"
+                  className="d-none d-lg-block d-flex flex-column align-items-center justify-content-center w-50 "
                   style={{ aspectRatio: "1 / 1" }}
                   onClick={() => navigate("/casher")}
                 >
@@ -46,6 +50,7 @@ const Home = () => {
                   <span className="mt-2">Cassa</span> {/* Nome del bottone */}
                 </Button>
               </Col>
+
               <Col className="d-flex justify-content-start">
                 <Button
                   variant="primary"
@@ -59,8 +64,11 @@ const Home = () => {
                   {/* Nome del bottone */}
                 </Button>
               </Col>
+
             </Row>
+
             <Row>
+
               <Col className="d-flex justify-content-end">
                 <Button
                   variant="primary"

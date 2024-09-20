@@ -44,7 +44,7 @@ function MyNavbar() {
                 <LinkContainer to="/">
                   <Nav.Link>Home</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/casher">
+                <LinkContainer to="/casher" className="d-none d-lg-block">
                   <Nav.Link>Cassa</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/products">

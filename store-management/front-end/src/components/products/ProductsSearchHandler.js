@@ -1,12 +1,16 @@
 // ----- API ----- 
 import { getProductsBrand, getProductByEan, getProductByProduct_id, getProductsGlobal } from "../../services/apiProducts.js";
 
-export const productsSearchHandler = async ({ thisBrand, srcParams, pagination, handleLoader, handlerSearchResult, handlePagination }) => {
+export const productsSearchHandler = async ({ 
+  thisBrand, 
+  srcParams, 
+  pagination, 
+  handleLoader, 
+  handlerSearchResult, 
+  handlePagination, 
+   }) => {
+
   handleLoader(true);
-  console.log("pagination", pagination);
-  
-
-
 
   try {
     let prodResult = {};

@@ -54,15 +54,15 @@ router.delete("/prod_id/:id", async (req, res) => {
 });
 
 // ----- PATCH -> Modifica articolo
-router.patch("/prod_id/:id", async(req,res)=>{
+router.patch("/prod_id/:id", async (req, res) => {
   try {
-    const updatePrduct = await Product.findOneAndUpdate({product_id: req.params.id}, req.body,{
+    const updatePrduct = await Product.findOneAndUpdate({ product_id: req.params.id }, req.body, {
       new: true,
     });
     res.json(updatePrduct);
   } catch (error) {
-    res.status(400).json({message: error.message})
-    
+    res.status(400).json({ message: error.message })
+
   }
 })
 
@@ -100,7 +100,7 @@ router.get("/brand/:brand", async (req, res) => {
       }
 
       if (queryParams.length > 0) {
-        query.$and = queryParams;
+        query.$or = queryParams;
       }
     }
 
@@ -148,19 +148,21 @@ router.get("/", async (req, res) => {
     // se c'è testo applica filtri
     if (srcText) {
 
+      const queryParams = [];
+
       if (in_name === "true") {
-        query.$and = [
-          { name: { $regex: srcText, $options: "i" } }
-        ];
+        queryParams.push({ name: { $regex: srcText, $options: "i" } });
       }
 
       if (in_description === "true") {
-        query.$and = [
-          { description: { $regex: srcText, $options: "i" } }
-        ];
+        queryParams.push({ description: { $regex: srcText, $options: "i" } });
+      }
+
+      if (queryParams.length > 0) {
+        query.$or = queryParams; // Combina le condizioni con $or
       }
     }
-        
+
     const products = await Product.find(query)
       .sort({ [sort]: sortDirection })
       .skip(skip)

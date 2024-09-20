@@ -1,37 +1,70 @@
 // ----- React -----
-import React from "react";
-// ----- stilizzazione -----
-import { Button, ButtonGroup, ButtonToolbar } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+// ----- Stilizzazione -----
+import { Tabs, Tab, Container } from "react-bootstrap";
 
+function NavBrands({
+  brands,
+  thisBrand,
+  handleThisBrand,
+  srcResult,
+  srcParams,
+}) {
+  // Stato valore tab selezionato
+  const [key, setKey] = useState("");
 
-function NavBrands({ brands, thisBrand, handleThisBrand }) {
- 
-
+  // Aggiorna tabs
+  useEffect(() => {
+    if (!key && thisBrand) {
+      setKey(thisBrand.name);
+    }
+  }, [thisBrand, key]);
 
   return (
-    <>
-    <ButtonToolbar className="mb-3">
-      <ButtonGroup aria-label="Basic example">
-        
+    <Container className="mb-1">
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => {
+          setKey(k);
+          const selectedBrand = brands.find((brand) => brand.name === k);
+          handleThisBrand(selectedBrand);
+        }}
+        className="mb-3 "
+      >
         {brands.map((brand, i) => (
-          <Button
-            key={i}
-            variant={
-              thisBrand && thisBrand.name === brand.name
-                ? "primary"
-                : "secondary"
+          <Tab
+            eventKey={brand.name}
+            title={
+              <span
+                style={{
+                  fontWeight: key === brand.name ? "700" : "500",
+                }}
+              >
+                {brand.name}
+              </span>
             }
-            onClick={() => handleThisBrand(brand)}
+            key={i}
           >
-            {brand.name}
-          </Button>
+            <div>
+              <h4>
+                {srcResult &&
+                srcResult.length > 0 &&
+                srcParams.filter_name !== "brand"
+                  ? srcParams.filter_name === "global"
+                    ? "Risultati su tutti i prodotti"
+                    : srcParams.filter_name === "ean"
+                    ? "Risultato prodotto per EAN"
+                    : srcParams.filter_name === "product_id"
+                    ? "Risultato prodotto per codice"
+                    : ""
+                  : brand.name}
+              </h4>
+            </div>
+          </Tab>
         ))}
-
-      </ButtonGroup>
-      </ButtonToolbar>
-
-    
-    </>
+      </Tabs>
+    </Container>
   );
 }
 
