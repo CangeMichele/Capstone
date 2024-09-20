@@ -58,7 +58,6 @@ const ProductsPage = () => {
 
   // Callback che gestisce risultato ricerca
   const handlerSearchResult = (newResult) => {
-    console.log("Nuovo risultato della ricerca:", newResult);
     setSrcResult(newResult);
   };
 
@@ -70,10 +69,6 @@ const ProductsPage = () => {
     }));
   };
 
-  useEffect(()=>{
-    console.log("DEBUG srcResult: NELLA PAGINA PRINCIPALE ", srcResult);
-    
-  }, [srcResult]);
 
   // Effetto per aggiornare srcResult quando thisBrand cambia
   useEffect(() => {
@@ -116,7 +111,6 @@ const ProductsPage = () => {
             pagination,
           );
           
-          console.log("DEBUG: sei qui");
           setProdsBrand(prodResult.products);
           handlePagination({ totalPages: prodResult.totalPages });
         } catch (error) {

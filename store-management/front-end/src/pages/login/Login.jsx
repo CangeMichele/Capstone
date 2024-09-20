@@ -5,16 +5,26 @@ import { useNavigate } from "react-router-dom";
 import { loginUser, getUserData } from "../../services/apiUser";
 import { getAllStores } from "../../services/apiStore";
 // ---- Stilizzazione -----
-import { Form, Row, Button, Container } from "react-bootstrap";
+import { Form, Row, Button, Container, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Login() {
   //Stato contentente i Pdv
   const [stores, setStores] = useState([]);
   //Stato contenente il PdV elezionato
-  const [selectedStore, setSelectedStore] = useState("");
+  const [selectedStore, setSelectedStore] = useState(null);
   // Stato valori user
   const [userData, setUserData] = useState({ userId: "", password: "" });
+
+  // Stato mostra modale
+  const [showModal, setShowModal] = useState(false);
+  // Stato messaggio modale
+  const [modalMessage, setModalMessage] = useState("");
+
+  // Stato mostra modale benvenuto
+  const [showWelcome, setShowWelcome] = useState(false);
+  // Stato nome utente
+  const [userName, setUserName] = useState("");
 
   const navigate = useNavigate();
 
@@ -33,8 +43,10 @@ export default function Login() {
 
   // Gestore selezione PdV
   const handleStoreChange = (e) => {
-    const selectedStoreCode  = (e.target.value);
-    const thisStore = stores.find(store => store.storeCode === selectedStoreCode);
+    const selectedStoreCode = e.target.value;
+    const thisStore = stores.find(
+      (store) => store.storeCode === selectedStoreCode
+    );
 
     setSelectedStore(thisStore);
     // Salva il PdV selezionato nel localStorage
@@ -46,47 +58,59 @@ export default function Login() {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
+  // Gestore modifica testo modale
+  const handleShowModal = (message) => {
+    setModalMessage(message);
+    setShowModal(true);
+  };
+
+  //Callback status mostra modale
+  const handleCloseModal = () => setShowModal(false);
+
   // Gestore invio form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const loginResponse  = await loginUser(userData); //richiama api per il loging utente
+      const loginResponse = await loginUser(userData); //richiama api per il loging utente
       localStorage.setItem("token", loginResponse.token);
 
       const userDataResponse = await getUserData();
-      console.log("userDataResponse", userDataResponse);
       localStorage.setItem("user", JSON.stringify(userDataResponse));
-      
-    
+
+      // controlla se utente giusto nel PdV giusto
       if (userDataResponse.storeCode !== selectedStore.storeCode) {
-        alert("L'utente non è associato al punto vendita selezionato. Seleziona il punto vendita corretto.");
-        return; // Blocca il login se gli storeCode non corrispondono
+        handleShowModal(
+          "L'utente non è associato al punto vendita selezionato. Seleziona il punto vendita corretto."
+        );
+        return;
       }
 
-      console.log("response", loginResponse);
+      // Imposta il nome utente e mostra il messaggio di benvenuto
+      setUserName(userDataResponse.firstName);
+      setShowWelcome(true);
 
-      // Trigger l'evento storage per aggiornare la Navbar
-      window.dispatchEvent(new Event("storage")); // Scatena un evento di storage per aggiornare componenti come la Navbar
-      alert("Login effettuato con successo!"); // Mostra un messaggio di successo
-      navigate("/"); // Naviga alla Home
+      // Nascondi il messaggio di benvenuto e reindirizza dopo 2 secondi
+      setTimeout(() => {
+        setShowWelcome(false);
+        navigate("/");
+      }, 2000);
+
+
+   
     } catch (error) {
       console.error("Errore durante il login:", error);
-      alert("Credenziali non valide. Riprova.");
-      console.log(userData);
+      handleShowModal("Credenziali non valide. Riprova.");
     }
   };
 
   return (
-    <Container
-      fluid
-      className="d-flex justify-content-center align-items-center"
-    >
+    <Container fluid className="d-flex justify-content-center align-items-center">
       <Form className=" p-4 text-center w-50" onSubmit={handleSubmit}>
         <Row className="mb-3 justify-content-center">
           <Form.Group controlId="store-select">
             <Form.Label>Punto Vendita</Form.Label>
-            <Form.Select value={selectedStore} onChange={handleStoreChange}>
+            <Form.Select value={selectedStore?.storeCode || ""} onChange={handleStoreChange}>
               <option key="label-option" value="">
                 Seleziona un Punto Vendita
               </option>
@@ -112,9 +136,6 @@ export default function Login() {
               onChange={handleChange}
               name="userId"
             />
-            <Form.Control.Feedback type="invalid">
-              Codice non valido
-            </Form.Control.Feedback>
           </Form.Group>
         </Row>
 
@@ -128,9 +149,6 @@ export default function Login() {
               onChange={handleChange}
               name="password"
             />
-            <Form.Control.Feedback type="invalid">
-              Password errata
-            </Form.Control.Feedback>
           </Form.Group>
         </Row>
 
@@ -138,6 +156,26 @@ export default function Login() {
           accedi
         </Button>
       </Form>
+
+      {/* Modal di benvenuto */}
+      <Modal show={showWelcome} centered>
+        <Modal.Body className="text-center">
+          <h1 className="display-4">Benvenuto, {userName}!</h1>
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal per errori */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Messaggio</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Chiudi
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }

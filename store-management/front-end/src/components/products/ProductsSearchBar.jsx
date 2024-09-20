@@ -130,12 +130,6 @@ function ProductsSearchBar({
     }
   }, [search, selectedRadio, selectedCheck]);
 
-
-useEffect(()=>{
-  console.log("DEBUG SRCPARAMS", srcParams);
-  
-},[srcParams])
-
   // Gestisce il cambiamento del valore radio button
   const handleButtonRadioChange = (key) => {
     setSelectedRadio(key);

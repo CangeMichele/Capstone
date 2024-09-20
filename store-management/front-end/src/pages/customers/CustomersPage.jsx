@@ -1,6 +1,6 @@
 // ---- React ----
 import React, { useEffect, useState } from "react";
-// ----- React-router-dom ----- 
+// ----- React-router-dom -----
 import { useNavigate } from "react-router-dom";
 // ----- Stilizzazione -----
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
@@ -88,7 +88,6 @@ const CustomersPage = () => {
 
   // Navigazione
   const navigate = useNavigate();
-
 
   const CustomerFormReset = () => {
     // Reset degli stati
@@ -232,6 +231,9 @@ const CustomersPage = () => {
         setIsLoading,
         CustomerFormReset
       );
+
+      //torna in cima alla pagina
+      window.scrollTo(0, 0);
     }
   };
 
@@ -243,7 +245,6 @@ const CustomersPage = () => {
         toastMessage={toastMessage}
       />
       <Container>
-       
         <Row className="align-items-center mb-3">
           <Col xs="auto">
             <Button

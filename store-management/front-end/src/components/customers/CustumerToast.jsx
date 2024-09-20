@@ -14,7 +14,7 @@ function CustomerToast({
       <Toast
         onClose={() => setShowCustomerToast(false)}
         show={showCustomerToast}
-        delay={3000}
+        delay={1500}
         autohide
       >
         <Toast.Header>

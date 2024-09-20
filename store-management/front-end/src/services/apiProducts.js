@@ -14,7 +14,7 @@ export const getProductsBrand = async (brand, srcParams, pagination) => {
     };
 
     // Se srcText non è vuoto, aggiungi i parametri di ricerca
-    if (srcParams.filter_value.srcText !== "") {
+    if (srcParams.filter_value?.srcText) {
       queryParams.srcText = srcParams.filter_value.srcText;
       queryParams.in_name = srcParams.filter_value.in_name;
       queryParams.in_description = srcParams.filter_value.in_description;

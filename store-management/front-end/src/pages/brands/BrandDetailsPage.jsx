@@ -14,10 +14,10 @@ function BrandDetailsPage() {
   // Stato per memorizzare i dati del fornitore
   const [supplier, setSupplier] = useState(null);
 
-  useEffect(() => {
-    // Recupera i dati dal localStorage
-    const storedBrand = JSON.parse(localStorage.getItem("thisBrand"));
+  // Recupera i dati dal localStorage
+  const storedBrand = JSON.parse(localStorage.getItem("thisBrand"));
 
+  useEffect(() => {
     if (storedBrand) {
       setSupplier(storedBrand.supplier);
     }
@@ -40,7 +40,7 @@ function BrandDetailsPage() {
       <Card className="mb-4" style={{ maxWidth: "800px", margin: "0 auto" }}>
         <Card.Header as="h5" className="text-center">
           <img 
-            src={supplier.logoUrl} 
+            src={storedBrand.logoUrl} 
             alt={supplier.name} 
             style={{ maxWidth: "150px" }} 
           />

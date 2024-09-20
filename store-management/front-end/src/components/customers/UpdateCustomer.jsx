@@ -13,49 +13,52 @@ export default async function UpdateCustomer(
   setIsLoading,
   CustomerFormReset
 ) {
-  console.log("selectedCustomer in update", selectedCustomer);
 
   /* Funzione di paragone che utilizza libreria lodash per confrontare annidamenti,
   funzione ricorsiva (richiama se stessa) */
   const updatedFieldsCatcher = (originalObj, updatedObj) => {
+    
     // Funzione di paragone
     const matchUpdate = (originalValue, updateValue) => {
+      
       // Se entrambi sono array
       if (_.isArray(originalValue) && _.isArray(updateValue)) {
-        const diff = [];
+        const diff = _.cloneDeep(originalValue); //copia l'array
 
-        // Gestisce array con oggetti o valori primari
-        for (let i = 0; i < Math.max(originalValue.length, updateValue.length); i++) {
-          const itemDiff = updatedFieldsCatcher(
-            originalValue[i],
-            updateValue[i]
-          );
-          if (itemDiff !== undefined) {
-            diff[i] = itemDiff;
+       // cicla l'array e sovrascrive solo elementi diversi
+        for (let i = 0; i < updateValue.length; i++) {
+          
+          const itemDiff = updatedFieldsCatcher(originalValue[i], updateValue[i]); //rischiama se stessa
+          
+          if (itemDiff !== undefined) { //sovrascrive
+            diff[i] = itemDiff; 
           }
         }
 
-        return diff.length > 0 ? diff : undefined;
+        return diff;
       }
 
       // Se entrambi sono oggetti
       if (_.isObject(originalValue) && _.isObject(updateValue)) {
-        const diffResult = {};
+
+        const diffResult = _.cloneDeep(originalValue); // copia l'oggetto
+       
+       // cicla l'oggetto e sovrascrive solo campi diversi
         _.forEach(updatedObj, (value, key) => {
-          const itemDiff = updatedFieldsCatcher(
-            originalObj[key],
-            value
-          );
+         
+          const itemDiff = updatedFieldsCatcher(originalObj[key], value); //risìchiama se stessa
+          
           if (itemDiff !== undefined) {
-            diffResult[key] = itemDiff;
+            diffResult[key] = itemDiff; //sovrascrive campi diversi
           }
         });
 
-        return _.isEmpty(diffResult) ? undefined : diffResult;
+        return diffResult;
+
       }
 
-      // Confronto diretto dei valori
-      return !_.isEqual(originalValue, updateValue) ? updateValue : undefined;
+      // Ritorna il valore aggiornato se diverso
+    return !_.isEqual(originalValue, updateValue) ? updateValue : originalValue;
     };
 
     return matchUpdate(originalObj, updatedObj);
@@ -63,7 +66,6 @@ export default async function UpdateCustomer(
 
   // Esegui la funzione di paragone
   const updatedFields = updatedFieldsCatcher(selectedCustomer, formData);
-  console.log("updatedFields: ", updatedFields);
 
   // Se non ci sono variazioni manda un messaggio e si ferma
   if (!Object.keys(updatedFields).length) {
@@ -91,8 +93,9 @@ export default async function UpdateCustomer(
     setToastMessage({
       header: "Modificato !",
       body: `Aggiornamento per ${selectedCustomer.lastName} ${selectedCustomer.firstName} - ${selectedCustomer.taxCode} 
-      avvenuto con successo. Nuovi parametri: ${updatedFieldsString}`,
+      avvenuto con successo.`,
     });
+
 
     // Reset del form
     CustomerFormReset();
@@ -103,7 +106,11 @@ export default async function UpdateCustomer(
     });
   } finally {
     setIsLoading(false);
-    // Visualizza toast
-    setShowCustomerToast(true);
+
+
+   // Aspettaprima di mostrare il toast per dare tempo alla pagina di risalire
+   setTimeout(() => {
+    setShowCustomerToast(true); 
+  }, 250);
   }
 }

@@ -44,7 +44,7 @@ function ProductDetails() {
             <Row>
               <Col md={4} className="d-flex justify-content-center">
                 <Card.Img
-                  src="https://image.freepik.com/free-vector/pets-shop-logo-with-dog-cat-parrot-illustration_162786-75.jpg"
+                  src={thisBrand.logoUrl}
                   alt={product.name}
                   className="img-fluid rounded"
                 />

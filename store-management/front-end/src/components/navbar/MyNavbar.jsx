@@ -13,11 +13,12 @@ function MyNavbar() {
   // ----- gestore Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("store");
+    localStorage.removeItem("thisBrand");
     navigate("/");
   };
 
   const store = JSON.parse(localStorage.getItem("store"));
-  const user = JSON.parse(localStorage.getItem("user"));
 
 
   return (
@@ -31,7 +32,7 @@ function MyNavbar() {
         {/* Centro: Nome e Codice Negozio */}
         <Container className="d-flex justify-content-center">
           <Navbar.Text>
-            {store.Name} - {store.storeCode}
+            {store && <span>{store.Name} - {store.storeCode}</span>}
           </Navbar.Text>
         </Container>
 
